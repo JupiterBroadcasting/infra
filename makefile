@@ -25,7 +25,7 @@ devnuke:
 devconfigure:
 	cd ansible; ansible-playbook -b run.yaml --limit dev --ask-become-pass
 
-devcompose:
+devcomp:
 	cd ansible; ansible-playbook run.yaml --limit dev --tags compose
 
 

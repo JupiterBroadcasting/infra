@@ -1,6 +1,8 @@
 tfinit:
 	cd terraform/demo; terraform init
+	cd terraform/dev; terraform init
 
+# demo
 democreate:
 	cd terraform/demo; terraform apply
 
@@ -11,9 +13,20 @@ democonfigure:
 	cd ansible; ansible-playbook -b run.yaml --limit demo --ask-become-pass
 
 democompose:
-	cd ansible; ansible-playbook -b run.yaml --limit demo --tags compose
+	cd ansible; ansible-playbook run.yaml --limit demo --tags compose
 
+# dev
+devcreate:
+	cd terraform/dev; terraform apply
 
+devnuke:
+	cd terraform/dev; terraform destroy
+
+devconfigure:
+	cd ansible; ansible-playbook -b run.yaml --limit dev --ask-become-pass
+
+devcompose:
+	cd ansible; ansible-playbook run.yaml --limit dev --tags compose
 
 
 # ansible housekeeping

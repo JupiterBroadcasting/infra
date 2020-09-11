@@ -12,14 +12,14 @@ package_list:
   - name: wireguard
 
 # geerlingguy.security
-security_ssh_port: 53142
+security_ssh_port: "{{ demo_ssh_port }}"
 security_ssh_password_authentication: "no"
 security_ssh_permit_root_login: "no"
 security_ssh_usedns: "no"
 security_autoupdate_enabled: true
 security_fail2ban_enabled: true
 security_sudoers_passworded:
-  - ironicbadger
+  - "{{ main_username }}"
 
 # geerlingguy.ntp
 ntp_timezone: "America/New_York"
@@ -33,7 +33,7 @@ ntp_timezone: "America/New_York"
 github_users_authorized_keys_exclusive: true
 github_users:
   # You can specify an object with 'name' (required) and 'groups' (optional):
-  - name: ironicbadger
+  - name: "{{ main_username }}"
     groups: sudo,docker
 
 # ironicbadger.bash-aliases (formerly ferrarimarco.bash-aliases)
@@ -50,7 +50,7 @@ bash_aliases:
   - { alias: "zsnap", command: "zfs list -t snapshot" }
 
 # ironicbadger.docker_compose_generator
-appdata_path: /home/ironicbadger/appdata
+appdata_path: "/home/{{ main_username }}/appdata"
 containers:
   - service_name: traefik
     active: true
@@ -72,7 +72,7 @@ containers:
       - --certificatesresolvers.cloudflare.acme.dnschallenge=true
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
       #- --certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.cloudflare.acme.email=alexktz@gmail.com
+      - "--certificatesresolvers.cloudflare.acme.email={{ cloudflare_account_email }}"
       - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
     volumes:
       - "{{ appdata_path }}/traefik/letsencrypt:/letsencrypt"

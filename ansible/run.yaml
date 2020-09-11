@@ -1,0 +1,12 @@
+---
+- hosts: demo
+  roles:
+    - role: grog.package
+    - role: geerlingguy.security
+    - role: geerlingguy.ntp
+    - role: geerlingguy.docker
+    - role: geerlingguy.github-users
+    - role: ironicbadger.ansible_role_bash_aliases
+  tasks:
+    - hostname:
+        name: demo

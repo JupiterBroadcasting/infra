@@ -18,6 +18,8 @@ security_ssh_permit_root_login: "no"
 security_ssh_usedns: "no"
 security_autoupdate_enabled: true
 security_fail2ban_enabled: true
+security_sudoers_passworded:
+  - ironicbadger
 
 # geerlingguy.ntp
 ntp_timezone: "America/New_York"

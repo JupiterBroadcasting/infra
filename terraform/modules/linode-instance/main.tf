@@ -4,4 +4,5 @@ resource "linode_instance" "node" {
   region          = var.region
   type            = var.type
   authorized_keys = var.sshkeys
+  root_pass       = var.root_pass
 }

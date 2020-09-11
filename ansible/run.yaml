@@ -7,6 +7,8 @@
     - role: geerlingguy.security
     - role: geerlingguy.ntp
     - role: ironicbadger.ansible_role_bash_aliases
+    - role: ironicbadger.ansible_role_docker_compose_generator
+      tags: compose
   tasks:
     - hostname:
         name: demo

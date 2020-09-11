@@ -10,8 +10,8 @@ demonuke:
 democonfigure:
 	cd ansible; ansible-playbook -b run.yaml --limit demo --ask-become-pass
 
-democompose:
-	cd ansible; ansible-playbook -b run.yaml --limit demo --tags compose
+democomp:
+	cd ansible; ansible-playbook run.yaml --limit demo --tags compose
 
 
 

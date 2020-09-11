@@ -48,3 +48,37 @@ bash_aliases:
   - { alias: "appdata", command: "cd /mnt/tank/appdata" }
   - { alias: "zspace", command: "zfs list -o space" }
   - { alias: "zsnap", command: "zfs list -t snapshot" }
+
+# ironicbadger.docker_compose_generator
+appdata_path: /home/ironicbadger/appdata
+containers:
+  - service_name: traefik
+    active: true
+    image: traefik
+    container_name: traefik
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    command:
+      #- --log.level=debug
+      #- --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.cloudflare.acme.dnschallenge=true
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      #- --certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.cloudflare.acme.email=alexktz@gmail.com
+      - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
+    volumes:
+      - "{{ appdata_path }}/traefik/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: unless-stopped
+    include_global_env_vars: false
+    environment:
+      - CLOUDFLARE_EMAIL=alexktz@gmail.com
+      - CLOUDFLARE_API_KEY=f10132ca6d468764fa71c1c96c1c37e8c79e7

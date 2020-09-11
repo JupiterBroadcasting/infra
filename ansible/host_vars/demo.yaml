@@ -1,0 +1,48 @@
+# grog.package
+package_list:
+  - name: bash-completion
+  - name: curl
+  - name: htop
+  - name: net-tools
+  - name: nmap
+  - name: sudo
+  - name: tmux
+  - name: tree
+  - name: wget
+  - name: wireguard
+
+# geerlingguy.security
+security_ssh_port: 53142
+security_ssh_password_authentication: "no"
+security_ssh_permit_root_login: "no"
+security_ssh_usedns: "no"
+security_autoupdate_enabled: true
+security_fail2ban_enabled: true
+
+# geerlingguy.ntp
+ntp_timezone: "America/New_York"
+
+# geerlingguy.docker
+# defaults are sane, no need to configure anything
+# https://github.com/geerlingguy/ansible-role-docker/blob/master/defaults/main.yml
+
+# geerlingguy.github_users
+
+github_users_authorized_keys_exclusive: true
+github_users:
+  # You can specify an object with 'name' (required) and 'groups' (optional):
+  - name: ironicbadger
+    groups: sudo,docker
+
+# ironicbadger.bash-aliases (formerly ferrarimarco.bash-aliases)
+bash_aliases:
+  - { alias: "dtail", command: "docker logs -tf --tail='50' " }
+  - { alias: "dstop", command: "docker stop `docker ps -aq`" }
+  - { alias: "drm", command: "docker rm `docker ps -aq`" }
+  - { alias: "dcp", command: "docker-compose -f ~/docker-compose.yml " }
+  - { alias: "dprune", command: "docker image prune" }
+  - { alias: "dprunesys", command: "docker system prune --all" }
+  - { alias: "dtop", command: "docker run --name ctop  -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop" }
+  - { alias: "appdata", command: "cd /mnt/tank/appdata" }
+  - { alias: "zspace", command: "zfs list -o space" }
+  - { alias: "zsnap", command: "zfs list -t snapshot" }

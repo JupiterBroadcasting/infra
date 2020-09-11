@@ -1,4 +1,4 @@
-show_subdomains = [
+show_subdomain = [
     "demo",
     "gallery"
 ]

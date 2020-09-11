@@ -7,10 +7,9 @@ provider "linode" {
 
 provider "cloudflare" {
     # https://api.cloudflare.com/#getting-started-resource-ids
-    version = "~> 2.0"
     email = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["account-email"]
     api_key = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["api-key"]
-    account_id = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["account-id"]
+    #account_id = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["account-id"]
 
     #domain-me = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["domain-me"]
     #domain-cloud = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["domain-cloud"]
@@ -20,11 +19,16 @@ provider "cloudflare" {
 
 ## Grab Linode SSH keys by Label
 ## linode-cli sshkeys list
-
 data "linode_sshkey" "randy" {
   label = "randy"
 }
 
 data "linode_sshkey" "mooncake" {
   label = "mooncake"
+}
+
+## DNS
+
+variable "show_subdomain" {
+  type = set(string)
 }

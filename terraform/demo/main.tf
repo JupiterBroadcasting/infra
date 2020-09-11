@@ -6,6 +6,7 @@ module "node" {
   region = var.linode_region_us_east
   type   = var.linode_type_10usd_2gb
   sshkeys = [
+    data.linode_sshkey.ktzdev.ssh_key,
     data.linode_sshkey.randy.ssh_key,
     data.linode_sshkey.mooncake.ssh_key
   ]
@@ -21,7 +22,7 @@ resource "cloudflare_record" "show" {
   for_each = var.show_subdomain
   name     = each.key
   value    = element(tolist(module.node.ipv4), 0)
-  type     = "A" 
+  type     = "A"
 }
 
 

@@ -60,9 +60,12 @@ containers:
       - 80:80
       - 443:443
       - 8080:8080
+    environment:
+      - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
+      - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
     command:
       #- --log.level=debug
-      #- --api.insecure=true
+      - --api.insecure=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
@@ -77,18 +80,94 @@ containers:
     volumes:
       - "{{ appdata_path }}/traefik/letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    include_global_env_vars: false
     restart: unless-stopped
-    environment:
-      - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
-      - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
   - service_name: nginx
     active: true
-    image: nginx
+    image: linuxserver/nginx
     container_name: nginx
+    environment:
+        - PUID=1000
+        - PGID=1000
     labels:
       - traefik.enable=true
-      - traefik.http.routers.nginx.rule=(Host(`demo.selfhosted.show`) && Path(`/nginx`))
+      - traefik.http.routers.nginx.rule=(Host(`dev.selfhosted.show`) && Path(`/nginx`))
       - traefik.http.routers.nginx.entrypoints=websecure
       - traefik.http.routers.nginx.tls.certresolver=cloudflare
       - traefik.http.services.nginx.loadbalancer.server.port=80
+    include_global_env_vars: false
     restart: unless-stopped
+  - service_name: homer
+    active: true
+    image: b4bz/homer
+    container_name: homer
+    volumes:
+      - "{{ appdata_path }}/homer/assets:/www/assets"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homer.rule=Host(`homer.dev.selfhosted.show`)
+      - traefik.http.routers.homer.entrypoints=websecure
+      - traefik.http.routers.homer.tls.certresolver=cloudflare
+      - traefik.http.services.homer.loadbalancer.server.port=8080
+    include_global_env_vars: false
+    restart: unless-stopped
+  - service_name: mysql_lychee
+    active: true
+    image: mariadb:10.5.5-focal
+    container_name: mysql_lychee
+    volumes:
+      - "{{ appdata_path }}/mysql_lychee:/var/lib/mysql" 
+    environment:
+      - "MYSQL_ROOT_PASSWORD={{ mysql_root_password }}"
+      - "MYSQL_PASSWORD={{ mysql_password }}"
+      - "MYSQL_DATABASE={{ mysql_database_lychee }}"
+      - "MYSQL_USER={{ mysql_user_lychee }}"
+    include_global_env_vars: false
+    restart: unless-stopped
+  - service_name: lychee
+    active: true
+    image: lycheeorg/lychee:v4.0.6
+    container_name: lychee
+    volumes:
+      - "{{ appdata_path }}/lychee/config:/config"
+      - "{{ appdata_path }}/lychee/lychee/uploads:/uploads"
+      - "{{ appdata_path }}/lychee/lychee/sym:/sym"
+    environment:
+      - PHP_TZ=America/New_York
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql_lychee
+      - DB_PORT=3306
+      - "DB_USERNAME={{ mysql_user_lychee }}"
+      - "DB_DATABASE={{ mysql_database_lychee }}"
+      - "DB_PASSWORD={{ mysql_password }}"
+    labels:
+        - traefik.enable=true
+        - traefik.http.routers.lychee.rule=Host(`gallery.dev.selfhosted.show`)
+        - traefik.http.routers.lychee.entrypoints=websecure
+        - traefik.http.routers.lychee.tls.certresolver=cloudflare
+        - traefik.http.services.lychee.loadbalancer.server.port=80
+    depends_on:
+      - mysql_lychee
+    include_global_env_vars: false
+    restart: unless-stopped
+
+  # template for docker-compose services
+  #
+  # - service_name:
+  #   active:
+  #   image:
+  #   container_name:
+  #   ports:
+  #     -
+  #   volumes:
+  #     - "{{ appdata_path }}/app:/config" 
+  #   environment:
+  #     -
+  #   labels:
+  #       - traefik.enable=true
+  #       - traefik.http.routers.lychee.rule=Host(`gallery.dev.selfhosted.show`)
+  #       - traefik.http.routers.lychee.entrypoints=websecure
+  #       - traefik.http.routers.lychee.tls.certresolver=cloudflare
+  #       - traefik.http.services.lychee.loadbalancer.server.port=80
+  #   include_global_env_vars: false
+  #   restart: unless-stopped

@@ -1,17 +1,17 @@
 tfinit:
-	cd terraform/infra; terraform init
+	cd terraform/demo; terraform init
 
-createdemo:
-	cd terraform/infra; terraform apply
+democreate:
+	cd terraform/demo; terraform apply
 
-destroydemo:
-	cd terraform/infra; terraform apply
+demonuke:
+	cd terraform/demo; terraform destroy
 
-configuredemo:
-	cd ansible; ansible-playbook -b run.yaml --limit cartman --ask-become-pass --vault-password-file .vault-password
+democonfigure:
+	cd ansible; ansible-playbook -b run.yaml --limit demo --ask-become-pass
 
 democompose:
-	cd ansible; ansible-playbook -b run.yaml --limit cartman --ask-become-pass --vault-password-file .vault-password --tags compose
+	cd ansible; ansible-playbook -b run.yaml --limit demo --tags compose
 
 
 

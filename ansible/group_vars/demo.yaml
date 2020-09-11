@@ -80,5 +80,5 @@ containers:
     restart: unless-stopped
     include_global_env_vars: false
     environment:
-      - CLOUDFLARE_EMAIL=alexktz@gmail.com
-      - CLOUDFLARE_API_KEY=f10132ca6d468764fa71c1c96c1c37e8c79e7
+      - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
+      - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"

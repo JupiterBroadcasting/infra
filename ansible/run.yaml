@@ -30,3 +30,6 @@
   tasks:
     - hostname:
         name: ssh-dev
+    - package:
+        name: '*'
+        state: latest

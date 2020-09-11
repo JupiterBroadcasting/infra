@@ -23,10 +23,10 @@ devnuke:
 	cd terraform/dev; terraform destroy
 
 devconfigure:
-	cd ansible; ansible-playbook -b run.yaml --limit dev --ask-become-pass
+	cd ansible; ansible-playbook -b run.yaml --limit dev --ask-become-pass --vault-password-file .vault-password
 
 devcomp:
-	cd ansible; ansible-playbook run.yaml --limit dev --tags compose
+	cd ansible; ansible-playbook run.yaml --limit dev --tags compose --vault-password-file .vault-password
 
 
 # ansible housekeeping

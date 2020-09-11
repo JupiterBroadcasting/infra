@@ -1,5 +1,7 @@
 ---
 - hosts: demo
+  vars_files:
+    - 'vars/vault.yaml'
   roles:
     - role: grog.package
     - role: geerlingguy.docker
@@ -11,4 +13,20 @@
       tags: compose
   tasks:
     - hostname:
-        name: demo
+        name: ssh-demo
+
+- hosts: dev
+  vars_files:
+    - 'vars/vault.yaml'
+  roles:
+    - role: grog.package
+    - role: geerlingguy.docker
+    - role: geerlingguy.github-users
+    - role: geerlingguy.security
+    - role: geerlingguy.ntp
+    - role: ironicbadger.ansible_role_bash_aliases
+    - role: ironicbadger.ansible_role_docker_compose_generator
+      tags: compose
+  tasks:
+    - hostname:
+        name: ssh-dev

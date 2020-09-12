@@ -13,11 +13,6 @@ package_list:
 
 # geerlingguy.security
 security_ssh_port: "{{ demo_ssh_port }}"
-security_ssh_password_authentication: "no"
-security_ssh_permit_root_login: "no"
-security_ssh_usedns: "no"
-security_autoupdate_enabled: true
-security_fail2ban_enabled: true
 security_sudoers_passworded:
   - "{{ main_username }}"
 

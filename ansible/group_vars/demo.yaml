@@ -118,3 +118,43 @@ containers:
       - mysql_lychee
     include_global_env_vars: false
     restart: unless-stopped
+###
+  - service_name: mysql_codimd
+    active: true
+    image: mariadb:10.5.5-focal
+    container_name: mysql_codimd
+    volumes:
+      - "{{ appdata_path }}/mysql_codimd:/var/lib/mysql" 
+    environment:
+      - "MYSQL_ROOT_PASSWORD={{ mysql_root_password }}"
+      - "MYSQL_PASSWORD={{ mysql_password }}"
+      - "MYSQL_DATABASE={{ mysql_database_codimd }}"
+      - "MYSQL_USER={{ mysql_user_codimd }}"
+    include_global_env_vars: false
+    restart: unless-stopped
+  - service_name: codimd
+    active: true
+    image: linuxserver/codimd
+    container_name: codimd
+    volumes:
+      - "{{ appdata_path }}/codimd:/config"
+    environment:
+      - DB_HOST=mysql_codimd
+      - "DB_USER={{ mysql_user_codimd }}"
+      - "DB_PASS={{ mysql_root_password }}"
+      - DB_NAME=codimd
+      - DB_PORT=3306
+      - PGID=1000
+      - PUID=1000
+      - TZ=America/New_York
+    depends_on:
+      - mysql_codimd
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.codimd.rule=Host(`codimd.selfhosted.show`)
+      - traefik.http.routers.codimd.entrypoints=websecure
+      - traefik.http.routers.codimd.tls.certresolver=cloudflare
+      - traefik.http.services.codimd.loadbalancer.server.port=3000
+    include_global_env_vars: false
+    restart: unless-stopped
+

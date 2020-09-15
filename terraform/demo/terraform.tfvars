@@ -4,7 +4,8 @@ demo_nodename = "ssh-demo"
 # subdomains to create for demo instance in cloudflare
 show_subdomain = [
     "demo",
-    "gallery"
+    "gallery",
+    "codimd"
 ]
 
 ######

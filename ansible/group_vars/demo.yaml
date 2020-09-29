@@ -152,4 +152,33 @@ containers:
       - "MYSQL_USER={{ mysql_user_codimd }}"
     restart: unless-stopped
 ###
+  - service_name: nginx_halcyon
+    active: true
+    image: nginx
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nginx.rule=Host(`halcyon.casa`)
+      - traefik.http.routers.nginx.entrypoints=websecure
+      - traefik.http.routers.nginx.tls.certresolver=cloudflare
+      - traefik.http.services.nginx.loadbalancer.server.port=80
+    volumes:
+      - "{{ appdata_path }}/halycon/web:/usr/share/nginx/html:ro" 
+    restart: unless-stopped
 
+
+  # - service_name:
+  #   active: true
+  #   image:
+  #   container_name: #optional - only required if diff to service_name
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.nginx.rule=Host(`foo.bar.com`)
+  #     - traefik.http.routers.nginx.entrypoints=websecure
+  #     - traefik.http.routers.nginx.tls.certresolver=cloudflare
+  #     - traefik.http.services.nginx.loadbalancer.server.port=80
+  #   volumes:
+  #     - "{{ appdata_path }}/app:/config" 
+  #   environment:
+  #     -
+  #   include_global_env_vars: #optional - defaults to false
+  #   restart: unless-stopped

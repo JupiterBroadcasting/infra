@@ -157,10 +157,10 @@ containers:
     image: nginx
     labels:
       - traefik.enable=true
-      - traefik.http.routers.nginx.rule=Host(`halcyon.casa`)
-      - traefik.http.routers.nginx.entrypoints=websecure
-      - traefik.http.routers.nginx.tls.certresolver=cloudflare
-      - traefik.http.services.nginx.loadbalancer.server.port=80
+      - traefik.http.routers.halcyon.rule=Host(`halcyon.casa`)
+      - traefik.http.routers.halcyon.entrypoints=websecure
+      - traefik.http.routers.halcyon.tls.certresolver=cloudflare
+      - traefik.http.services.halcyon.loadbalancer.server.port=80
     volumes:
       - "{{ appdata_path }}/halycon/web:/usr/share/nginx/html:ro" 
     restart: unless-stopped

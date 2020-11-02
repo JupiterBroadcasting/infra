@@ -118,7 +118,7 @@ containers:
     restart: unless-stopped
 ###
   - service_name: codimd
-    active: true
+    active: false
     image: linuxserver/codimd
     volumes:
       - "{{ appdata_path }}/codimd:/config"
@@ -141,7 +141,7 @@ containers:
       - traefik.http.services.codimd.loadbalancer.server.port=3000
     restart: unless-stopped
   - service_name: mysql_codimd
-    active: true
+    active: false
     image: mariadb:10.5.5-focal
     volumes:
       - "{{ appdata_path }}/mysql_codimd:/var/lib/mysql" 

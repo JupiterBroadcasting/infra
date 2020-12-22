@@ -10,10 +10,10 @@ demonuke:
 	cd terraform/demo; terraform destroy
 
 democonfigure:
-	cd ansible; ansible-playbook -b run.yaml --limit demo --ask-become-pass
+	cd ansible; ansible-playbook -b run.yaml --limit demo --ask-become-pass --vault-password-file .vault-password
 
 democomp:
-	cd ansible; ansible-playbook run.yaml --limit demo --tags compose
+	cd ansible; ansible-playbook run.yaml --limit demo --tags compose --vault-password-file .vault-password
 
 # dev
 devcreate:

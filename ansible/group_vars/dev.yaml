@@ -13,11 +13,6 @@ package_list:
 
 # geerlingguy.security
 security_ssh_port: "{{ demo_ssh_port }}"
-security_ssh_password_authentication: "no"
-security_ssh_permit_root_login: "no"
-security_ssh_usedns: "no"
-security_autoupdate_enabled: true
-security_fail2ban_enabled: true
 security_sudoers_passworded:
   - "{{ main_username }}"
 
@@ -51,6 +46,8 @@ bash_aliases:
 
 # ironicbadger.docker_compose_generator
 appdata_path: "/home/{{ main_username }}/appdata"
+pgid: 1000
+puid: 1000
 containers:
   - service_name: traefik
     active: true
@@ -86,9 +83,6 @@ containers:
     active: true
     image: linuxserver/nginx
     container_name: nginx
-    environment:
-        - PUID=1000
-        - PGID=1000
     labels:
       - traefik.enable=true
       - traefik.http.routers.nginx.rule=(Host(`dev.selfhosted.show`) && Path(`/nginx`))
@@ -98,7 +92,7 @@ containers:
     include_global_env_vars: false
     restart: unless-stopped
   - service_name: homer
-    active: true
+    active: false
     image: b4bz/homer
     container_name: homer
     volumes:

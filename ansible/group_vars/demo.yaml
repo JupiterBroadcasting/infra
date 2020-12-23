@@ -44,6 +44,8 @@ bash_aliases:
   - { alias: "appdata", command: "cd /mnt/tank/appdata" }
   - { alias: "zspace", command: "zfs list -o space" }
   - { alias: "zsnap", command: "zfs list -t snapshot" }
+  - { alias: "dfclean", command: "df -h -x tmpfs -x zfs -t fuse.mergerfs -t xfs -t ext4"}
+  - { alias: "dfzfs", command: "df -h -x tmpfs -t fuse.mergerfs -t xfs -t ext4"}
 
 # ironicbadger.docker_compose_generator
 appdata_path: "/home/{{ main_username }}/appdata"
@@ -117,41 +119,6 @@ containers:
     include_global_env_vars: false
     restart: unless-stopped
 ###
-  - service_name: codimd
-    active: false
-    image: linuxserver/codimd
-    volumes:
-      - "{{ appdata_path }}/codimd:/config"
-    environment:
-      - DB_HOST=mysql_codimd
-      - "DB_USER={{ mysql_user_codimd }}"
-      - "DB_PASS={{ mysql_root_password }}"
-      - DB_NAME=codimd
-      - DB_PORT=3306
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-    depends_on:
-      - mysql_codimd
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.codimd.rule=Host(`codimd.selfhosted.show`)
-      - traefik.http.routers.codimd.entrypoints=websecure
-      - traefik.http.routers.codimd.tls.certresolver=cloudflare
-      - traefik.http.services.codimd.loadbalancer.server.port=3000
-    restart: unless-stopped
-  - service_name: mysql_codimd
-    active: false
-    image: mariadb:10.5.5-focal
-    volumes:
-      - "{{ appdata_path }}/mysql_codimd:/var/lib/mysql" 
-    environment:
-      - "MYSQL_ROOT_PASSWORD={{ mysql_root_password }}"
-      - "MYSQL_PASSWORD={{ mysql_password }}"
-      - "MYSQL_DATABASE={{ mysql_database_codimd }}"
-      - "MYSQL_USER={{ mysql_user_codimd }}"
-    restart: unless-stopped
-###
   - service_name: nginx_halcyon
     active: true
     image: nginx
@@ -164,7 +131,19 @@ containers:
     volumes:
       - "{{ appdata_path }}/halycon/web:/usr/share/nginx/html:ro" 
     restart: unless-stopped
-
+###
+  - service_name: wiki
+    active: true
+    image: selfhostedshow/wiki
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.wiki.rule=Host(`wiki.selfhosted.show`)
+      - traefik.http.routers.wiki.entrypoints=websecure
+      - traefik.http.routers.wiki.tls.certresolver=cloudflare
+      - traefik.http.services.wiki.loadbalancer.server.port=8000
+    volumes:
+      - "{{ appdata_path }}/wiki:/docs:ro" 
+    restart: unless-stopped
 
   # - service_name:
   #   active: true
@@ -181,4 +160,42 @@ containers:
   #   environment:
   #     -
   #   include_global_env_vars: #optional - defaults to false
+  #   restart: unless-stopped
+
+
+### not used atm
+###
+  # - service_name: codimd
+  #   active: false
+  #   image: linuxserver/codimd
+  #   volumes:
+  #     - "{{ appdata_path }}/codimd:/config"
+  #   environment:
+  #     - DB_HOST=mysql_codimd
+  #     - "DB_USER={{ mysql_user_codimd }}"
+  #     - "DB_PASS={{ mysql_root_password }}"
+  #     - DB_NAME=codimd
+  #     - DB_PORT=3306
+  #     - PGID=1000
+  #     - PUID=1000
+  #     - TZ=America/New_York
+  #   depends_on:
+  #     - mysql_codimd
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.codimd.rule=Host(`codimd.selfhosted.show`)
+  #     - traefik.http.routers.codimd.entrypoints=websecure
+  #     - traefik.http.routers.codimd.tls.certresolver=cloudflare
+  #     - traefik.http.services.codimd.loadbalancer.server.port=3000
+  #   restart: unless-stopped
+  # - service_name: mysql_codimd
+  #   active: false
+  #   image: mariadb:10.5.5-focal
+  #   volumes:
+  #     - "{{ appdata_path }}/mysql_codimd:/var/lib/mysql" 
+  #   environment:
+  #     - "MYSQL_ROOT_PASSWORD={{ mysql_root_password }}"
+  #     - "MYSQL_PASSWORD={{ mysql_password }}"
+  #     - "MYSQL_DATABASE={{ mysql_database_codimd }}"
+  #     - "MYSQL_USER={{ mysql_user_codimd }}"
   #   restart: unless-stopped

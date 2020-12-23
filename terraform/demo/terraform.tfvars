@@ -5,7 +5,7 @@ demo_nodename = "ssh-demo"
 show_subdomain = [
     "demo",
     "gallery",
-    "codimd"
+    "wiki"
 ]
 
 ######

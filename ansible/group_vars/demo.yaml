@@ -132,17 +132,17 @@ containers:
       - "{{ appdata_path }}/halycon/web:/usr/share/nginx/html:ro" 
     restart: unless-stopped
 ###
-  - service_name: wiki
+  - service_name: nginx_wiki
     active: true
-    image: selfhostedshow/wiki
+    image: nginx
     labels:
       - traefik.enable=true
       - traefik.http.routers.wiki.rule=Host(`wiki.selfhosted.show`)
       - traefik.http.routers.wiki.entrypoints=websecure
       - traefik.http.routers.wiki.tls.certresolver=cloudflare
-      - traefik.http.services.wiki.loadbalancer.server.port=8000
+      - traefik.http.services.wiki.loadbalancer.server.port=80
     volumes:
-      - "{{ appdata_path }}/wiki:/docs:ro" 
+      - "{{ appdata_path }}/wiki/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
 
   # - service_name:

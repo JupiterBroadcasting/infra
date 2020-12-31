@@ -101,7 +101,6 @@ containers:
       - traefik.http.routers.lychee.rule=Host(`gallery.selfhosted.show`)
       - traefik.http.routers.lychee.entrypoints=websecure
       - traefik.http.routers.lychee.tls.certresolver=cloudflare
-      - traefik.http.services.lychee.loadbalancer.server.port=80
     depends_on:
       - mysql_lychee
     restart: unless-stopped
@@ -127,7 +126,6 @@ containers:
       - traefik.http.routers.halcyon.rule=Host(`halcyon.casa`)
       - traefik.http.routers.halcyon.entrypoints=websecure
       - traefik.http.routers.halcyon.tls.certresolver=cloudflare
-      - traefik.http.services.halcyon.loadbalancer.server.port=80
     volumes:
       - "{{ appdata_path }}/halycon/web:/usr/share/nginx/html:ro" 
     restart: unless-stopped
@@ -140,9 +138,20 @@ containers:
       - traefik.http.routers.wiki.rule=Host(`wiki.selfhosted.show`)
       - traefik.http.routers.wiki.entrypoints=websecure
       - traefik.http.routers.wiki.tls.certresolver=cloudflare
-      - traefik.http.services.wiki.loadbalancer.server.port=80
     volumes:
       - "{{ appdata_path }}/wiki/site:/usr/share/nginx/html:ro" 
+    restart: unless-stopped
+###
+  - service_name: nginx_pms_wiki
+    active: true
+    image: nginx
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pmswiki.rule=Host(`perfectmediaserver.com`)
+      - traefik.http.routers.pmswiki.entrypoints=websecure
+      - traefik.http.routers.pmswiki.tls.certresolver=cloudflare
+    volumes:
+      - "{{ appdata_path }}/pms-wiki/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
 
   # - service_name:

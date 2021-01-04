@@ -5,7 +5,8 @@ demo_nodename = "ssh-demo"
 show_subdomain = [
     "demo",
     "gallery",
-    "wiki"
+    "wiki",
+    "hedgedoc"
 ]
 
 ######

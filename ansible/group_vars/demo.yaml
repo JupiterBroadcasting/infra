@@ -70,6 +70,9 @@ containers:
       - --certificatesresolvers.cloudflare.acme.dnschallenge=true
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
       - "--certificatesresolvers.cloudflare.acme.email={{ cloudflare_account_email }}"
+      # - --certificatesresolvers.namecheap.acme.dnschallenge=true
+      # - --certificatesresolvers.namecheap.acme.dnschallenge.provider=namecheap
+      # - "--certificatesresolvers.namecheap.acme.email={{ cloudflare_account_email }}"
       - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
     volumes:
       - "{{ appdata_path }}/traefik/letsencrypt:/letsencrypt"
@@ -78,6 +81,8 @@ containers:
     environment:
       - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
       - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
+      # - "NAMECHEAP_API_USER={{ namecheap_api_user }}"
+      # - "NAMECHEAP_API_KEY={{ namecheap_api_key }}"
     restart: unless-stopped
 ###  
   - service_name: lychee
@@ -153,6 +158,41 @@ containers:
     volumes:
       - "{{ appdata_path }}/pms-wiki/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
+###
+  - service_name: hedgedoc
+    active: true
+    image: linuxserver/hedgedoc
+    volumes:
+      - "{{ appdata_path }}/hedgedoc/app:/config"
+    environment:
+      - DB_HOST=mysql_hedgedoc
+      - "DB_USER={{ hedgedoc_mysql_user }}"
+      - "DB_PASS={{ hedgedoc_mysql_password }}"
+      - "DB_NAME={{ hedgedoc_mysql_db }}"
+      - "DB_PORT={{ hedgedoc_mysql_db_port }}"
+      - PGID=1000
+      - PUID=1000
+      - TZ=America/New_York
+    depends_on:
+      - mysql_hedgedoc
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.hedgedoc.rule=Host(`{{ hedgedoc_url }}`)"
+      - traefik.http.routers.hedgedoc.entrypoints=websecure
+      - traefik.http.routers.hedgedoc.tls.certresolver=cloudflare
+      - traefik.http.services.hedgedoc.loadbalancer.server.port=3000
+    restart: unless-stopped
+  - service_name: mysql_hedgedoc
+    active: true
+    image: mariadb:10.5.5-focal
+    volumes:
+      - "{{ appdata_path }}/hedgedoc/db:/var/lib/mysql" 
+    environment:
+      - "MYSQL_ROOT_PASSWORD={{ hedgedoc_mysql_root_password }}"
+      - "MYSQL_PASSWORD={{ hedgedoc_mysql_password }}"
+      - "MYSQL_DATABASE={{ hedgedoc_mysql_db }}"
+      - "MYSQL_USER={{ hedgedoc_mysql_user }}"
+    restart: unless-stopped
 
   # - service_name:
   #   active: true
@@ -173,38 +213,3 @@ containers:
 
 
 ### not used atm
-###
-  # - service_name: codimd
-  #   active: false
-  #   image: linuxserver/codimd
-  #   volumes:
-  #     - "{{ appdata_path }}/codimd:/config"
-  #   environment:
-  #     - DB_HOST=mysql_codimd
-  #     - "DB_USER={{ mysql_user_codimd }}"
-  #     - "DB_PASS={{ mysql_root_password }}"
-  #     - DB_NAME=codimd
-  #     - DB_PORT=3306
-  #     - PGID=1000
-  #     - PUID=1000
-  #     - TZ=America/New_York
-  #   depends_on:
-  #     - mysql_codimd
-  #   labels:
-  #     - traefik.enable=true
-  #     - traefik.http.routers.codimd.rule=Host(`codimd.selfhosted.show`)
-  #     - traefik.http.routers.codimd.entrypoints=websecure
-  #     - traefik.http.routers.codimd.tls.certresolver=cloudflare
-  #     - traefik.http.services.codimd.loadbalancer.server.port=3000
-  #   restart: unless-stopped
-  # - service_name: mysql_codimd
-  #   active: false
-  #   image: mariadb:10.5.5-focal
-  #   volumes:
-  #     - "{{ appdata_path }}/mysql_codimd:/var/lib/mysql" 
-  #   environment:
-  #     - "MYSQL_ROOT_PASSWORD={{ mysql_root_password }}"
-  #     - "MYSQL_PASSWORD={{ mysql_password }}"
-  #     - "MYSQL_DATABASE={{ mysql_database_codimd }}"
-  #     - "MYSQL_USER={{ mysql_user_codimd }}"
-  #   restart: unless-stopped

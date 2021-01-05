@@ -171,17 +171,6 @@ containers:
       - traefik.http.routers.hedgedoc.tls.certresolver=cloudflare
       - traefik.http.services.hedgedoc.loadbalancer.server.port=3000
     restart: unless-stopped
-  - service_name: mysql_hedgedoc
-    active: false
-    image: mariadb:10.5.5-focal
-    volumes:
-      - "{{ appdata_path }}/hedgedoc/db:/var/lib/mysql" 
-    environment:
-      - "MYSQL_ROOT_PASSWORD={{ hedgedoc_mysql_root_password }}"
-      - "MYSQL_PASSWORD={{ hedgedoc_mysql_password }}"
-      - "MYSQL_DATABASE={{ hedgedoc_mysql_db }}"
-      - "MYSQL_USER={{ hedgedoc_mysql_user }}"
-    restart: unless-stopped
   - service_name: hedgedoc_postgres
     active: true
     image: postgres:9.6-alpine

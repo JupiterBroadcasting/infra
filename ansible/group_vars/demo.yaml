@@ -175,12 +175,9 @@ containers:
     active: true
     image: postgres:9.6-alpine
     environment:
-      - "POSTGRES_USER=hackmd"
-      - "POSTGRES_PASSWORD=hackmdpass"
-      - "POSTGRES_DB=hackmd"
-      # - "POSTGRES_USER={{ hedgedoc_postgres_user }}"
-      # - "POSTGRES_PASSWORD={{ hedgedoc_postgres_pass }}"
-      # - "POSTGRES_DB={{ hedgedoc_postgres_db }}"
+      - "POSTGRES_USER={{ hedgedoc_postgres_user }}"
+      - "POSTGRES_PASSWORD={{ hedgedoc_postgres_pass }}"
+      - "POSTGRES_DB={{ hedgedoc_postgres_db }}"
     volumes:
       - "{{ appdata_path }}/hedgedoc/db:/var/lib/postgresql/data"
     restart: unless-stopped

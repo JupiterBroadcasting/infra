@@ -59,8 +59,8 @@ containers:
       - 443:443
       - 8080:8080
     command:
-      - --log.level=debug
-      - --api.insecure=true
+      - --log.level=info
+      - --api.insecure=false
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80

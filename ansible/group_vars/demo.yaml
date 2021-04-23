@@ -181,6 +181,20 @@ containers:
     volumes:
       - "{{ appdata_path }}/hedgedoc/db:/var/lib/postgresql/data"
     restart: unless-stopped
+  ###
+  - service_name: nginx_synology
+    active: true
+    image: nginx
+    depends_on: 
+        - traefik    
+    labels:
+        - traefik.enable=true
+        - traefik.http.routers.nginx.rule=Host(`synology.selfhosted.show`)
+        - traefik.http.routers.nginx.entrypoints=websecure
+        - traefik.http.routers.nginx.tls.certresolver=cloudflare
+    volumes:
+      - "{{ appdata_path }}/nginx_synology/web:/usr/share/nginx/html:ro" 
+    restart: unless-stopped
 
   # - service_name:
   #   active: true

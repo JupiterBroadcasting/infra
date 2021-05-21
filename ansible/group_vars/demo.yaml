@@ -195,6 +195,40 @@ containers:
     volumes:
       - "{{ appdata_path }}/nginx_synology/web:/usr/share/nginx/html:ro" 
     restart: unless-stopped
+  ###
+  - service_name: exbin
+    active: true
+    image: m1dnight/exbin:latest
+    environment:
+      - DB_HOST=exbin_postgres
+      - "TCP_PORT={{ exbin_tcp_port }}"
+      - "TCP_IP={{ exbin_tcp_ip }}"
+      - "PORT={{ exbin_http_port }}"
+      - "DB_NAME={{ exbin_postgres_db }}"
+      - "DB_PASS={{ exbin_postgres_pass }}"
+      - "DB_USER={{ exbin_postgres_user }}"
+      - "MAX_BYTES={{ exbin_max_bytes }}"
+      - "EXTERNAL_URL={{ exbin_url }}"
+      - TZ=America/Seattle
+    depends_on:
+      - exbin_postgres
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.exbin.rule=Host(`{{ exbin_url }}`)"
+      - traefik.http.routers.exbin.entrypoints=websecure
+      - traefik.http.routers.exbin.tls.certresolver=cloudflare
+      - "traefik.http.services.exbin.loadbalancer.server.port={{ exbin_http_port }}"
+    restart: unless-stopped
+  - service_name: exbin_postgres
+    active: true
+    image: postgres:10-alpine
+    environment:
+      - "POSTGRES_USER={{ exbin_postgres_user }}"
+      - "POSTGRES_PASSWORD={{ exbin_postgres_pass }}"
+      - "POSTGRES_DB={{ exbin_postgres_db }}"
+    volumes:
+      - "{{ appdata_path }}/exbin/db:/var/lib/postgresql/data"
+    restart: unless-stopped
 
   # - service_name:
   #   active: true

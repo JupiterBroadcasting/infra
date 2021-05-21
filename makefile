@@ -1,6 +1,10 @@
 tfinit:
 	cd terraform/demo; terraform init
 	cd terraform/dev; terraform init
+	cd terraform/dns-ssh; terraform init
+
+dns:
+	cd terraform/dns-ssh; terraform apply
 
 # demo
 democreate:

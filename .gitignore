@@ -93,3 +93,4 @@ override.tf.json
 .history
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,macos,visualstudiocode,ansible,terraform
+.terraform.lock.hcl

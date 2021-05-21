@@ -200,9 +200,10 @@ containers:
     active: true
     image: m1dnight/exbin:latest
     environment:
+      - DB_HOST=exbin_postgres
       - "TCP_PORT={{ exbin_tcp_port }}"
       - "TCP_IP={{ exbin_tcp_ip }}"
-      - "HTTP_PORT={{ exbin_http_port }}"
+      - "PORT={{ exbin_http_port }}"
       - "DB_NAME={{ exbin_postgres_db }}"
       - "DB_PASS={{ exbin_postgres_pass }}"
       - "DB_USER={{ exbin_postgres_user }}"

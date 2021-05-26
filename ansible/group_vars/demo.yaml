@@ -209,6 +209,7 @@ containers:
       - "DB_USER={{ exbin_postgres_user }}"
       - "MAX_BYTES={{ exbin_max_bytes }}"
       - "EXTERNAL_URL={{ exbin_url }}"
+      - DEFAULT_VIEW=reader
       - TZ=America/Seattle
     depends_on:
       - exbin_postgres

@@ -199,6 +199,8 @@ containers:
   - service_name: exbin
     active: true
     image: m1dnight/exbin:latest
+    volumes:
+      - "{{ appdata_path }}/exbin/config/jb-rocket.png:/app/priv/static/images/jb-rocket.png"
     environment:
       - DB_HOST=exbin_postgres
       - "TCP_PORT={{ exbin_tcp_port }}"
@@ -210,6 +212,8 @@ containers:
       - "MAX_BYTES={{ exbin_max_bytes }}"
       - "EXTERNAL_URL={{ exbin_url }}"
       - DEFAULT_VIEW=reader
+      - BRAND=Jupiter Broadcasting
+      - LOGO_FILENAME=jb-rocket.png
       - TZ=America/Seattle
     depends_on:
       - exbin_postgres

@@ -211,6 +211,7 @@ containers:
       - "DB_USER={{ exbin_postgres_user }}"
       - "MAX_BYTES={{ exbin_max_bytes }}"
       - "EXTERNAL_URL={{ exbin_url }}"
+      - "ADMIN_PASSWORD={{ exbin_admin_password }}"
       - DEFAULT_VIEW=reader
       - BRAND=Jupiter Broadcasting
       - LOGO_FILENAME=jb-rocket.png

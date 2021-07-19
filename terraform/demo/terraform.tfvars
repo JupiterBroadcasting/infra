@@ -7,7 +7,8 @@ show_subdomain = [
     "gallery",
     "wiki",
     "hedgedoc",
-    "paste"
+    "paste",
+    "notes"
 ]
 
 ######

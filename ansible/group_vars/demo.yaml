@@ -151,43 +151,7 @@ containers:
       - traefik.http.routers.sshnotes.entrypoints=websecure
       - traefik.http.routers.sshnotes.tls.certresolver=cloudflare
     volumes:
-      - "{{ appdata_path }}/show-notes/selfhosted:/usr/share/nginx/html:ro" 
-    restart: unless-stopped
-###
-  - service_name: nginx_notes_lup
-    active: false
-    image: nginx
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.lupnotes.rule=Host(`notes.linuxunplugged.com`)
-      - traefik.http.routers.lupnotes.entrypoints=websecure
-      - traefik.http.routers.lupnotes.tls.certresolver=cloudflare
-    volumes:
-      - "{{ appdata_path }}/show-notes/lup:/usr/share/nginx/html:ro" 
-    restart: unless-stopped
-###
-  - service_name: nginx_notes_coder
-    active: false
-    image: nginx
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.codernotes.rule=Host(`notes.coder.show`)
-      - traefik.http.routers.codernotes.entrypoints=websecure
-      - traefik.http.routers.codernotes.tls.certresolver=cloudflare
-    volumes:
-      - "{{ appdata_path }}/show-notes/coder:/usr/share/nginx/html:ro" 
-    restart: unless-stopped
-###
-  - service_name: nginx_notes_lan
-    active: false
-    image: nginx
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.lannotes.rule=Host(`notes.linuxactionnews.com`)
-      - traefik.http.routers.lannotes.entrypoints=websecure
-      - traefik.http.routers.lannotes.tls.certresolver=cloudflare
-    volumes:
-      - "{{ appdata_path }}/show-notes/lan:/usr/share/nginx/html:ro" 
+      - "{{ appdata_path }}/show-notes/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
 ###
   - service_name: nginx_pms_wiki

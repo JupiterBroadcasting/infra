@@ -147,7 +147,7 @@ containers:
     image: nginx
     labels:
       - traefik.enable=true
-      - traefik.http.routers.shownotes.rule=Host(`search.jupiterbroadcasting.com`)
+      - traefik.http.routers.shownotes.rule=Host(`notes.jupiterbroadcasting.com`)
       - traefik.http.routers.shownotes.entrypoints=websecure
       - traefik.http.routers.shownotes.tls.certresolver=cloudflare
     volumes:

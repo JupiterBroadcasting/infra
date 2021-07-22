@@ -142,14 +142,14 @@ containers:
       - "{{ appdata_path }}/wiki/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
 ###
-  - service_name: nginx_notes_ssh
+  - service_name: nginx_shownotes
     active: true
     image: nginx
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sshnotes.rule=Host(`search.jupiterbroadcasting.com`)
-      - traefik.http.routers.sshnotes.entrypoints=websecure
-      - traefik.http.routers.sshnotes.tls.certresolver=cloudflare
+      - traefik.http.routers.shownotes.rule=Host(`search.jupiterbroadcasting.com`)
+      - traefik.http.routers.shownotes.entrypoints=websecure
+      - traefik.http.routers.shownotes.tls.certresolver=cloudflare
     volumes:
       - "{{ appdata_path }}/show-notes/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped

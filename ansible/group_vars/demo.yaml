@@ -210,7 +210,7 @@ containers:
   ###
   - service_name: exbin
     active: true
-    image: m1dnight/exbin:latest
+    image: m1dnight/exbin:0.0.7
     volumes:
       - "{{ appdata_path }}/exbin/config/jb-rocket.png:/app/priv/static/images/jb-rocket.png"
     environment:

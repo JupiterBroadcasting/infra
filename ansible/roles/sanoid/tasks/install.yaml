@@ -1,0 +1,46 @@
+---
+
+- name: Install dependencies for Arch based systems
+  package:
+    name: "{{ item }}"
+  loop:
+    - perl
+    - perl-capture-tiny
+    - perl-config-inifiles
+    - pv
+    - lzop
+  when: ansible_os_family == 'Archlinux'
+  become: true
+
+- name: Install dependencies for Debian based distros
+  package:
+    name: "{{ item }}"
+  loop:
+    - libcapture-tiny-perl
+    - libconfig-inifiles-perl
+    - pv
+    - lzop
+    - mbuffer
+  when: ansible_os_family == 'Debian'
+  become: true
+
+- name: install sanoid
+  package:
+    name: sanoid
+    state: latest
+
+- name: Create config directory
+  file:
+    path: /etc/sanoid
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: configure sanoid
+  copy:
+    #src: sanoid/sanoid.conf
+    src: "sanoid.conf"
+    dest: /etc/sanoid/sanoid.conf
+    owner: root
+    group: root
+    mode: '0644'

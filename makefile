@@ -16,6 +16,9 @@ demonuke:
 democonfigure:
 	cd ansible; ansible-playbook -b run.yaml --limit demo --ask-become-pass
 
+demorepl:
+	cd ansible; ansible-playbook -b run.yaml --limit demo --tags replication
+
 democomp:
 	cd ansible; ansible-playbook run.yaml --limit demo --tags compose
 

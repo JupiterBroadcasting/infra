@@ -11,6 +11,7 @@
     - role: ironicbadger.ansible_role_bash_aliases
     - role: ironicbadger.ansible_role_docker_compose_generator
       tags: compose
+    - role: sanoid
   tasks:
     - hostname:
         name: ssh-demo

@@ -45,8 +45,7 @@ bash_aliases:
   - { alias: "appdata", command: "cd /mnt/tank/appdata" }
   - { alias: "zspace", command: "zfs list -o space" }
   - { alias: "zsnap", command: "zfs list -t snapshot" }
-  - { alias: "dfclean", command: "df -h -x tmpfs -x zfs -t fuse.mergerfs -t xfs -t ext4"}
-  - { alias: "dfzfs", command: "df -h -x tmpfs -t fuse.mergerfs -t xfs -t ext4"}
+  - { alias: "dfclean", command: "df -h -x tmpfs -t fuse.mergerfs -t xfs -t ext4 -t zfs"}
 
 # ironicbadger.docker_compose_generator
 global_env_vars:
@@ -87,7 +86,7 @@ containers:
       - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
     restart: unless-stopped
 ###  
-  - service_name: lychee
+  - service_name: jb-lychee
     active: true
     image: lycheeorg/lychee:v4.3.0
     volumes:
@@ -97,7 +96,7 @@ containers:
     environment:
       - PHP_TZ=America/New_York
       - DB_CONNECTION=mysql
-      - DB_HOST=lychee_db
+      - DB_HOST=jb-lychee-db
       - DB_PORT=3306
       - "DB_USERNAME={{ mysql_user_lychee }}"
       - "DB_DATABASE={{ mysql_database_lychee }}"
@@ -108,9 +107,9 @@ containers:
       - traefik.http.routers.lychee.entrypoints=websecure
       - traefik.http.routers.lychee.tls.certresolver=cloudflare
     depends_on:
-      - lychee_db
+      - jb-lychee-db
     restart: unless-stopped
-  - service_name: lychee_db
+  - service_name: jb-lychee-db
     active: true
     image: mariadb:10.5.5-focal
     volumes:
@@ -123,7 +122,7 @@ containers:
     include_global_env_vars: false
     restart: unless-stopped
 ###
-  - service_name: nginx_sshwiki
+  - service_name: jb-nginx-sshwiki
     active: true
     image: nginx
     labels:
@@ -135,7 +134,7 @@ containers:
       - "{{ appdata_path_zfs }}/nginx_sshwiki/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
 ###
-  - service_name: nginx_shownotes
+  - service_name: jb-nginx-shownotes
     active: true
     image: nginx
     labels:
@@ -147,7 +146,7 @@ containers:
       - "{{ appdata_path_zfs }}/nginx_shownotes/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
 ###
-  - service_name: nginx_pmswiki
+  - service_name: ktz-nginx-pmswiki
     active: true
     image: nginx
     labels:
@@ -159,16 +158,16 @@ containers:
       - "{{ appdata_path_zfs }}/nginx_pmswiki/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
 ###
-  - service_name: hedgedoc
+  - service_name: jb-hedgedoc
     active: true
     image: quay.io/hedgedoc/hedgedoc:1.7.1
     volumes:
       - "{{ appdata_path_zfs }}/hedgedoc/app:/hedgedoc/public/uploads"
     environment:
-      - "CMD_DB_URL=postgres://{{ hedgedoc_postgres_user }}:{{ hedgedoc_postgres_pass }}@hedgedoc_postgres:5432/{{ hedgedoc_postgres_db }}"
+      - "CMD_DB_URL=postgres://{{ hedgedoc_postgres_user }}:{{ hedgedoc_postgres_pass }}@jb-hedgedoc-postgres:5432/{{ hedgedoc_postgres_db }}"
       - TZ=America/Seattle
     depends_on:
-      - hedgedoc_postgres
+      - jb-hedgedoc-postgres
     labels:
       - traefik.enable=true
       - "traefik.http.routers.hedgedoc.rule=Host(`{{ hedgedoc_url }}`)"
@@ -176,7 +175,7 @@ containers:
       - traefik.http.routers.hedgedoc.tls.certresolver=cloudflare
       - traefik.http.services.hedgedoc.loadbalancer.server.port=3000
     restart: unless-stopped
-  - service_name: hedgedoc_postgres
+  - service_name: jb-hedgedoc-postgres
     active: true
     image: postgres:9.6-alpine
     environment:
@@ -187,7 +186,7 @@ containers:
       - "{{ appdata_path_zfs }}/hedgedoc/db:/var/lib/postgresql/data"
     restart: unless-stopped
   ###
-  - service_name: nginx_synology
+  - service_name: jb-nginx-synology
     active: true
     image: nginx
     depends_on: 
@@ -201,13 +200,13 @@ containers:
       - "{{ appdata_path_zfs }}/nginx_synology/web:/usr/share/nginx/html:ro" 
     restart: unless-stopped
   ###
-  - service_name: exbin
+  - service_name: jb-exbin
     active: true
     image: m1dnight/exbin:0.0.7
     volumes:
       - "{{ appdata_path_zfs }}/exbin/config/jb-rocket.png:/app/priv/static/images/jb-rocket.png"
     environment:
-      - DB_HOST=exbin_postgres
+      - DB_HOST=jb-exbin-postgres
       - "TCP_PORT={{ exbin_tcp_port }}"
       - "TCP_IP={{ exbin_tcp_ip }}"
       - "PORT={{ exbin_http_port }}"
@@ -222,7 +221,7 @@ containers:
       - LOGO_FILENAME=jb-rocket.png
       - TZ=America/Seattle
     depends_on:
-      - exbin_postgres
+      - jb-exbin-postgres
     labels:
       - traefik.enable=true
       - "traefik.http.routers.exbin.rule=Host(`{{ exbin_url }}`)"
@@ -230,7 +229,7 @@ containers:
       - traefik.http.routers.exbin.tls.certresolver=cloudflare
       - "traefik.http.services.exbin.loadbalancer.server.port={{ exbin_http_port }}"
     restart: unless-stopped
-  - service_name: exbin_postgres
+  - service_name: jb-exbin-postgres
     active: true
     image: postgres:10-alpine
     environment:
@@ -241,7 +240,7 @@ containers:
       - "{{ appdata_path_zfs }}/exbin/db:/var/lib/postgresql/data"
     restart: unless-stopped
 ###
-  - service_name: healthchecks
+  - service_name: ktz-healthchecks
     active: true
     image: linuxserver/healthchecks
     labels:
@@ -265,7 +264,7 @@ containers:
     include_global_env_vars: true
     restart: unless-stopped
 ###
-  - service_name: unifi
+  - service_name: ktz-unifi
     active: true
     image: linuxserver/unifi-controller
     labels:
@@ -283,6 +282,38 @@ containers:
     volumes:
       - "{{ appdata_path_zfs }}/ktz-unifi:/config"
     include_global_env_vars: true
+    restart: unless-stopped
+###
+  - service_name: ktz-blog
+    active: true
+    image: ghost:4.6
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.ktzblog.rule=Host(`{{ cloud_url_ktz_blog }}`)"
+      - traefik.http.routers.ktzblog.entrypoints=websecure
+      - traefik.http.routers.ktzblog.tls.certresolver=cloudflare
+      #- "traefik.http.services.ktzblog.loadbalancer.server.port={{ cloud_ghost_port }}"
+    environment:
+      - NODE_ENV=production
+      - "url=https://{{ cloud_url_ktz_blog }}"
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz-blog:/var/lib/ghost/content"
+    restart: unless-stopped
+###
+  - service_name: ktz-blog-mum
+    active: true
+    image: ghost:4.6
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.mumblog.rule=Host(`{{ cloud_url_mum_blog }}`)"
+      - traefik.http.routers.mumblog.entrypoints=websecure
+      - traefik.http.routers.mumblog.tls.certresolver=cloudflare
+      #- "traefik.http.services.mumblog.loadbalancer.server.port={{ cloud_ghost_port }}"
+    environment:
+      - NODE_ENV=production
+      - "url=https://{{ cloud_url_mum_blog }}"
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz-blog-mum:/var/lib/ghost/content"
     restart: unless-stopped
 
   # - service_name:

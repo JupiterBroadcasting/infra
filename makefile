@@ -31,7 +31,7 @@ forcereqs:
 	cd ansible; ansible-galaxy install -r requirements.yaml --force
 
 decrypt:
-	cd ansible; ansible-vault decrypt --vault-password-file .vault-password vars/vault.yaml
+	cd ansible; ansible-vault decrypt vars/vault.yaml
 
 encrypt:
-	cd ansible; ansible-vault encrypt --vault-password-file .vault-password vars/vault.yaml
+	cd ansible; ansible-vault encrypt vars/vault.yaml

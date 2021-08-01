@@ -16,7 +16,7 @@ package_list:
 
 # geerlingguy.security
 security_ssh_port: "{{ demo_ssh_port }}"
-security_sudoers_passworded:
+security_sudoers_passwordless:
   - "{{ main_username }}"
 
 # geerlingguy.ntp
@@ -27,7 +27,6 @@ ntp_timezone: "America/New_York"
 # https://github.com/geerlingguy/ansible-role-docker/blob/master/defaults/main.yml
 
 # geerlingguy.github_users
-
 github_users_authorized_keys_exclusive: true
 github_users:
   # You can specify an object with 'name' (required) and 'groups' (optional):
@@ -50,6 +49,11 @@ bash_aliases:
   - { alias: "dfzfs", command: "df -h -x tmpfs -t fuse.mergerfs -t xfs -t ext4"}
 
 # ironicbadger.docker_compose_generator
+global_env_vars:
+  - "PUID={{ main_uid }}"
+  - "PGID={{ main_gid }}"
+  - "TZ={{ ntp_timezone }}"
+
 appdata_path: "/home/{{ main_username }}/appdata"
 appdata_path_zfs: /tank/appdata
 containers:
@@ -74,9 +78,9 @@ containers:
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
       - "--certificatesresolvers.cloudflare.acme.email={{ cloudflare_account_email }}"
       - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
+      - --serversTransport.insecureSkipVerify=true
     volumes:
       - "{{ appdata_path_zfs }}/traefik/letsencrypt:/letsencrypt"
-      - "{{ appdata_path_zfs }}/traefik/etc:/etc/traefik"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     environment:
       - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
@@ -235,6 +239,50 @@ containers:
       - "POSTGRES_DB={{ exbin_postgres_db }}"
     volumes:
       - "{{ appdata_path_zfs }}/exbin/db:/var/lib/postgresql/data"
+    restart: unless-stopped
+###
+  - service_name: healthchecks
+    active: true
+    image: linuxserver/healthchecks
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hc.rule=Host(`hc.{{ domain_cloud }}`)
+      - traefik.http.routers.hc.entrypoints=websecure
+      - traefik.http.routers.hc.tls.certresolver=cloudflare
+    environment:
+      - "SITE_ROOT=https://hc.{{ domain_cloud }}"
+      - "SITE_NAME=KTZ Healthchecks"
+      - ALLOWED_HOSTS=*
+      - "SUPERUSER_EMAIL={{ gmail_address }}"
+      - "SUPERUSER_PASSWORD={{ cloud_healthchecks_app_password}}"
+      - REGENERATE_SETTINGS=True
+      - "SECRET_KEY={{ cloud_healthchecks_secret_key }}"
+      - REGISTRATION_OPEN=False
+      - "PUSHOVER_API_TOKEN={{ pushover_api_healthchecks}}"
+      - "PUSHOVER_SUBSCRIPTION_URL={{ pushover_healthchecks_subscription_url }}"
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz-healthchecks:/config"
+    include_global_env_vars: true
+    restart: unless-stopped
+###
+  - service_name: unifi
+    active: true
+    image: linuxserver/unifi-controller
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.ubiq.rule=Host(`{{ cloud_url_ubiq }}`)"
+      - traefik.http.routers.ubiq.entrypoints=websecure
+      - traefik.http.routers.ubiq.tls=true
+      - traefik.http.routers.ubiq.tls.certresolver=cloudflare
+      - traefik.http.services.ubiq.loadbalancer.server.scheme=https
+      - traefik.http.services.ubiq.loadbalancer.server.port=8443
+    ports:
+      - "{{ cloud_unifi_port_advertise }}:{{ cloud_unifi_port_advertise_int }}"
+      - 3478:3478/udp
+    mem_limit: 1g
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz-unifi:/config"
+    include_global_env_vars: true
     restart: unless-stopped
 
   # - service_name:

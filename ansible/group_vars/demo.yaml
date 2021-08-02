@@ -66,7 +66,7 @@ containers:
       - 8080:8080
     command:
       - --log.level=info
-      - --accesslog=true
+      - --accesslog=false
       - --api.insecure=false
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
@@ -297,7 +297,7 @@ containers:
       - traefik.http.routers.ktzblog-rss.entrypoints=websecure
       - traefik.http.routers.ktzblog-rss.tls.certresolver=cloudflare
       - traefik.http.routers.ktzblog-rss.middlewares=rss-cache-control
-      - traefik.http.middlewares.rss-cache-control.headers.customresponseheaders.Cache-Control=public, max-age=3600
+      - traefik.http.middlewares.rss-cache-control.headers.customresponseheaders.Cache-Control=public, max-age=600
     environment:
       - NODE_ENV=production
       - "url=https://{{ cloud_url_ktz_blog }}"

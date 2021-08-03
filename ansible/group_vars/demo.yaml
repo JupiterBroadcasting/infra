@@ -319,6 +319,18 @@ containers:
     volumes:
       - "{{ appdata_path_zfs }}/ktz-blog-mum:/var/lib/ghost/content"
     restart: unless-stopped
+  ###
+  - service_name: jb-uptimekuma
+    active: true
+    image: louislam/uptime-kuma:1
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.uptimekuma.rule=Host(`status.jupiterbroadcasting.com`)"
+      - traefik.http.routers.uptimekuma.entrypoints=websecure
+      - traefik.http.routers.uptimekuma.tls.certresolver=cloudflare
+    volumes:
+      - "{{ appdata_path }}/jb_uptimekuma:/app/data"
+    restart: unless-stopped
 
   # - service_name:
   #   active: true

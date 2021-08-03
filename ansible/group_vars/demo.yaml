@@ -313,7 +313,6 @@ containers:
       - "traefik.http.routers.mumblog.rule=Host(`{{ cloud_url_mum_blog }}`)"
       - traefik.http.routers.mumblog.entrypoints=websecure
       - traefik.http.routers.mumblog.tls.certresolver=cloudflare
-      #- "traefik.http.services.mumblog.loadbalancer.server.port={{ cloud_ghost_port }}"
     environment:
       - NODE_ENV=production
       - "url=https://{{ cloud_url_mum_blog }}"

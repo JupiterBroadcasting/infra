@@ -325,11 +325,25 @@ containers:
     image: louislam/uptime-kuma:1
     labels:
       - traefik.enable=true
-      - "traefik.http.routers.uptimekuma.rule=Host(`status.jupiterbroadcasting.com`)"
+      - traefik.http.routers.uptimekuma.rule=Host(`status.jupiterbroadcasting.com`)
       - traefik.http.routers.uptimekuma.entrypoints=websecure
       - traefik.http.routers.uptimekuma.tls.certresolver=cloudflare
     volumes:
-      - "{{ appdata_path }}/jb_uptimekuma:/app/data"
+      - "{{ appdata_path_zfs }}/jb_uptimekuma:/app/data"
+    restart: unless-stopped
+  ###
+  - service_name: ktz-pastebin
+    active: true
+    image: mkaczanowski/pastebin
+    command: "--address 0.0.0.0 --db /var/lib/pastebin/ --uri https://p.{{ domain_cloud }}"
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.ktzpaste.rule=Host(`p.{{ domain_cloud }}`)"
+      - traefik.http.routers.ktzpaste.entrypoints=websecure
+      - traefik.http.routers.ktzpaste.tls.certresolver=cloudflare
+      - traefik.http.services.ktzpaste.loadbalancer.server.port=8000
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz_pastebin:/var/lib/pastebin"
     restart: unless-stopped
 
   # - service_name:

@@ -22,6 +22,12 @@ demorepl:
 democomp:
 	cd ansible; ansible-playbook run.yaml --limit demo --tags compose
 
+status:
+	cd ansible; ansible-playbook -b run.yaml --limit status --ask-become-pass
+
+statuscomp:
+	cd ansible; ansible-playbook run.yaml --limit status --tags compose
+
 # ansible housekeeping
 
 reqs:

@@ -33,6 +33,15 @@ github_users:
   - name: "{{ main_username }}"
     groups: sudo,docker
 
+# sanoid
+#sanoid_config_source: sanoid-morpheus.conf
+syncoid_status_dataset: "ironicbadger@status:tank/appdata"
+syncoid_hc_url: "curl -fsS --retry 3 https://hc.ktz.cloud/ping"
+syncoid_cron_jobs:
+  ## cloud to morpheus
+  - { job: '{{ syncoid_binary_path }} -r {{ syncoid_status_dataset }} tank/appdata && {{ syncoid_hc_url }}/{{ syncoid_hc_uuid_status }} > /dev/null', name: 'status_replication', weekday: '*', hour: '*', minute: '*/60' }
+
+
 # ironicbadger.bash-aliases (formerly ferrarimarco.bash-aliases)
 bash_aliases:
   - { alias: "dtail", command: "docker logs -tf --tail='50' " }
@@ -242,7 +251,7 @@ containers:
     restart: unless-stopped
 ###
   - service_name: ktz-healthchecks
-    active: true
+    active: false
     image: linuxserver/healthchecks
     labels:
       - traefik.enable=true
@@ -321,7 +330,7 @@ containers:
     restart: unless-stopped
   ###
   - service_name: jb-uptimekuma
-    active: true
+    active: false
     image: louislam/uptime-kuma:1
     labels:
       - traefik.enable=true
@@ -362,6 +371,3 @@ containers:
   #     -
   #   include_global_env_vars: #optional - defaults to false
   #   restart: unless-stopped
-
-
-### not used atm

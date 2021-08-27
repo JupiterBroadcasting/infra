@@ -335,10 +335,10 @@ containers:
   - service_name: ktz-pastebin
     active: true
     image: mkaczanowski/pastebin
-    command: "--address 0.0.0.0 --db /var/lib/pastebin/ --uri https://p.{{ domain_cloud }}"
+    command: "--address 0.0.0.0 --db /var/lib/pastebin/ --uri https://paste.{{ domain_cloud }}"
     labels:
       - traefik.enable=true
-      - "traefik.http.routers.ktzpaste.rule=Host(`p.{{ domain_cloud }}`)"
+      - "traefik.http.routers.ktzpaste.rule=Host(`paste.{{ domain_cloud }}`)"
       - traefik.http.routers.ktzpaste.entrypoints=websecure
       - traefik.http.routers.ktzpaste.tls.certresolver=cloudflare
       - traefik.http.services.ktzpaste.loadbalancer.server.port=8000

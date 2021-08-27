@@ -35,6 +35,7 @@ github_users:
 
 # sanoid
 #sanoid_config_source: sanoid-morpheus.conf
+syncoid_binary_path: /usr/bin/syncoid
 syncoid_status_dataset: "ironicbadger@status:tank/appdata"
 syncoid_hc_url: "curl -fsS --retry 3 https://hc.ktz.cloud/ping"
 syncoid_cron_jobs:

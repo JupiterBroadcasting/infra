@@ -110,6 +110,8 @@ containers:
       - REGISTRATION_OPEN=False
       - "PUSHOVER_API_TOKEN={{ pushover_api_healthchecks}}"
       - "PUSHOVER_SUBSCRIPTION_URL={{ pushover_healthchecks_subscription_url }}"
+      - "TELEGRAM_BOT_NAME={{ hc_telegram_bot_name }}"
+      - "TELEGRAM_TOKEN={{ hc_telegram_token }}"
     volumes:
       - "{{ appdata_path_zfs }}/ktz-healthchecks:/config"
     include_global_env_vars: true

@@ -13,7 +13,7 @@ democreate:
 demonuke:
 	cd terraform/demo; terraform destroy
 
-democonfigure:
+demo:
 	cd ansible; ansible-playbook -b run.yaml --limit demo --ask-become-pass
 
 demorepl:

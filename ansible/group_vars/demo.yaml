@@ -35,7 +35,7 @@ github_users:
 
 # sanoid
 #sanoid_config_source: sanoid-morpheus.conf
-syncoid_binary_path: /usr/bin/syncoid
+syncoid_binary_path: /usr/sbin/syncoid
 syncoid_status_dataset: "ironicbadger@status:tank/appdata"
 syncoid_hc_url: "curl -fsS --retry 3 https://hc.ktz.cloud/ping"
 syncoid_cron_jobs:
@@ -57,7 +57,6 @@ bash_aliases:
   - { alias: "zsnap", command: "zfs list -t snapshot" }
   - { alias: "dfclean", command: "df -h -x tmpfs -t fuse.mergerfs -t xfs -t ext4 -t zfs"}
 
-# ironicbadger.docker_compose_generator
 global_env_vars:
   - "PUID={{ main_uid }}"
   - "PGID={{ main_gid }}"
@@ -355,6 +354,18 @@ containers:
     volumes:
       - "{{ appdata_path_zfs }}/ktz_pastebin:/var/lib/pastebin"
     restart: unless-stopped
+  ###
+  - service_name: jb-monopoly
+    active: true
+    image: gonzague/monopoly
+    environment:
+      - HTTP=false
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.monopoly.rule=Host(`monopoly.selfhosted.show`)"
+      - traefik.http.routers.monopoly.entrypoints=websecure
+      - traefik.http.routers.monopoly.tls.certresolver=cloudflare
+      - traefik.http.services.monopoly.loadbalancer.server.port=8443
 
   # - service_name:
   #   active: true

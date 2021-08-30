@@ -40,7 +40,7 @@ syncoid_status_dataset: "ironicbadger@status:tank/appdata"
 syncoid_hc_url: "curl -fsS -m 10 --retry 5 -o /dev/null https://hc.ktz.cloud/ping"
 syncoid_cron_jobs:
   ## cloud to morpheus
-  - { job: '{{ syncoid_hc_url }}/{{ syncoid_hc_uuid_status }}/start && {{ syncoid_binary_path }} -r --skip-parent {{ syncoid_status_dataset }} tank/appdata && {{ syncoid_hc_url }}/{{ syncoid_hc_uuid_status }}/$? > /dev/null', name: 'status_replication', weekday: '*', hour: '*', minute: '*/30' }
+  - { job: '{{ syncoid_hc_url }}/{{ syncoid_hc_uuid_status }}/start && {{ syncoid_binary_path }} -r --skip-parent {{ syncoid_status_dataset }} tank/appdata && {{ syncoid_hc_url }}/{{ syncoid_hc_uuid_status }}/$? > /dev/null', name: 'status_replication', weekday: '*', hour: '*/6' }
 
 
 # ironicbadger.bash-aliases (formerly ferrarimarco.bash-aliases)

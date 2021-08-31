@@ -250,30 +250,6 @@ containers:
       - "{{ appdata_path_zfs }}/exbin/db:/var/lib/postgresql/data"
     restart: unless-stopped
 ###
-  - service_name: ktz-healthchecks
-    active: false
-    image: linuxserver/healthchecks
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.hc.rule=Host(`hc.{{ domain_cloud }}`)
-      - traefik.http.routers.hc.entrypoints=websecure
-      - traefik.http.routers.hc.tls.certresolver=cloudflare
-    environment:
-      - "SITE_ROOT=https://hc.{{ domain_cloud }}"
-      - "SITE_NAME=KTZ Healthchecks"
-      - ALLOWED_HOSTS=*
-      - "SUPERUSER_EMAIL={{ gmail_address }}"
-      - "SUPERUSER_PASSWORD={{ cloud_healthchecks_app_password}}"
-      - REGENERATE_SETTINGS=True
-      - "SECRET_KEY={{ cloud_healthchecks_secret_key }}"
-      - REGISTRATION_OPEN=False
-      - "PUSHOVER_API_TOKEN={{ pushover_api_healthchecks}}"
-      - "PUSHOVER_SUBSCRIPTION_URL={{ pushover_healthchecks_subscription_url }}"
-    volumes:
-      - "{{ appdata_path_zfs }}/ktz-healthchecks:/config"
-    include_global_env_vars: true
-    restart: unless-stopped
-###
   - service_name: ktz-unifi
     active: true
     image: linuxserver/unifi-controller

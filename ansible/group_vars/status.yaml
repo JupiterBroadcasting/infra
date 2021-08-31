@@ -112,6 +112,7 @@ containers:
       - "PUSHOVER_SUBSCRIPTION_URL={{ pushover_healthchecks_subscription_url }}"
       - "TELEGRAM_BOT_NAME={{ hc_telegram_bot_name }}"
       - "TELEGRAM_TOKEN={{ hc_telegram_token }}"
+      - "SITE_LOGO_URL=https://avatars.githubusercontent.com/u/2773080"
     volumes:
       - "{{ appdata_path_zfs }}/ktz-healthchecks:/config"
     include_global_env_vars: true

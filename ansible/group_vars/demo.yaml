@@ -337,17 +337,41 @@ containers:
       - "{{ appdata_path_zfs }}/ktz_pastebin:/var/lib/pastebin"
     restart: unless-stopped
   ###
-  - service_name: jb-monopoly
+  - service_name: ktz-lychee
     active: true
-    image: gonzague/monopoly
+    image: lycheeorg/lychee:v4.3.0
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz_lychee/app/config:/config"
+      - "{{ appdata_path_zfs }}/ktz_lychee/app/uploads:/uploads"
+      - "{{ appdata_path_zfs }}/ktz_lychee/app/sym:/sym"
     environment:
-      - HTTP=false
+      - PHP_TZ=America/New_York
+      - DB_CONNECTION=mysql
+      - DB_HOST=ktz-lychee-db
+      - DB_PORT=3306
+      - "DB_USERNAME={{ mysql_user_lychee }}"
+      - "DB_DATABASE={{ mysql_database_lychee }}"
+      - "DB_PASSWORD={{ mysql_password }}"
     labels:
       - traefik.enable=true
-      - "traefik.http.routers.monopoly.rule=Host(`monopoly.selfhosted.show`)"
-      - traefik.http.routers.monopoly.entrypoints=websecure
-      - traefik.http.routers.monopoly.tls.certresolver=cloudflare
-      - traefik.http.services.monopoly.loadbalancer.server.port=8443
+      - "traefik.http.routers.ktzlychee.rule=Host(`images.{{ domain_cloud }}`)"
+      - traefik.http.routers.ktzlychee.tls.certresolver=cloudflare
+    depends_on:
+      - ktz-lychee-db
+    restart: unless-stopped
+  - service_name: ktz-lychee-db
+    active: true
+    image: mariadb:10.5.5-focal
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz_lychee/db:/var/lib/mysql" 
+    environment:
+      - "MYSQL_ROOT_PASSWORD={{ mysql_root_password }}"
+      - "MYSQL_PASSWORD={{ mysql_password }}"
+      - "MYSQL_DATABASE={{ mysql_database_lychee }}"
+      - "MYSQL_USER={{ mysql_user_lychee }}"
+    include_global_env_vars: false
+    restart: unless-stopped
+
 
   # - service_name:
   #   active: true

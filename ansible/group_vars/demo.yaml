@@ -305,18 +305,6 @@ containers:
       - "{{ appdata_path_zfs }}/ktz-blog-mum:/var/lib/ghost/content"
     restart: unless-stopped
   ###
-  - service_name: jb-uptimekuma
-    active: false
-    image: louislam/uptime-kuma:1
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.uptimekuma.rule=Host(`status.jupiterbroadcasting.com`)
-      - traefik.http.routers.uptimekuma.entrypoints=websecure
-      - traefik.http.routers.uptimekuma.tls.certresolver=cloudflare
-    volumes:
-      - "{{ appdata_path_zfs }}/jb_uptimekuma:/app/data"
-    restart: unless-stopped
-  ###
   - service_name: ktz-pastebin
     active: true
     image: mkaczanowski/pastebin

@@ -260,7 +260,6 @@ containers:
       - traefik.http.routers.ubiq.tls.certresolver=cloudflare
       - traefik.http.services.ubiq.loadbalancer.server.scheme=https
       - traefik.http.services.ubiq.loadbalancer.server.port=8443
-      - traefik.http.routers.ubiq.middlewares=authelia@docker
     ports:
       - "{{ cloud_unifi_port_advertise }}:{{ cloud_unifi_port_advertise_int }}"
       - 3478:3478/udp

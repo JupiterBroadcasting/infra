@@ -42,7 +42,6 @@ syncoid_cron_jobs:
   ## cloud to morpheus
   - { job: '{{ syncoid_hc_url }}/{{ syncoid_hc_uuid_status }}/start && {{ syncoid_binary_path }} -r --skip-parent {{ syncoid_status_dataset }} tank/appdata && {{ syncoid_hc_url }}/{{ syncoid_hc_uuid_status }}/$? > /dev/null', name: 'status_replication', weekday: '*', hour: '*/6' }
 
-
 # ironicbadger.bash-aliases (formerly ferrarimarco.bash-aliases)
 bash_aliases:
   - { alias: "dtail", command: "docker logs -tf --tail='50' " }
@@ -261,6 +260,7 @@ containers:
       - traefik.http.routers.ubiq.tls.certresolver=cloudflare
       - traefik.http.services.ubiq.loadbalancer.server.scheme=https
       - traefik.http.services.ubiq.loadbalancer.server.port=8443
+      - traefik.http.routers.ubiq.middlewares=authelia@docker
     ports:
       - "{{ cloud_unifi_port_advertise }}:{{ cloud_unifi_port_advertise_int }}"
       - 3478:3478/udp
@@ -359,7 +359,79 @@ containers:
       - "MYSQL_USER={{ mysql_user_lychee }}"
     include_global_env_vars: false
     restart: unless-stopped
-
+  ###
+  - service_name: ktz-gitea
+    active: true
+    image: gitea/gitea
+    environment:
+      - "USER_UID={{ main_uid }}"
+      - "USER_GID={{ main_gid }}"
+      - "ROOT_URL=https://git.zetdemo.ktz.me"
+      - "SSH_DOMAIN=git.zetdemo.ktz.me"
+      - "APP_NAME=git.zetdemo.ktz.me"
+      - "SSH_PORT=2222"
+      - "DISABLE_REGISTRATION=false"
+      - "REQUIRE_SIGNIN_VIEW=false"
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz_gitea/gitea:/data"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.gitea.rule=Host(`git.zetdemo.ktz.me`)
+      - traefik.http.routers.gitea.tls.certresolver=cloudflare
+      - traefik.http.services.gitea.loadbalancer.server.port=3000
+    ports:
+      - 3000:3000
+      - '"2222:2222"'
+    restart: unless-stopped
+  ###
+  - service_name: ktz-drone
+    active: true
+    image: drone/drone:latest
+    volumes:
+      - "{{ appdata_path }}/ktz_drone:/data"
+    environment:
+      - "DRONE_GITEA_SERVER=https://git.zetdemo.ktz.me/"
+      - DRONE_GIT_ALWAYS_AUTH=true
+      - "DRONE_GITEA_CLIENT_ID={{ drone_gitea_client_id }}"
+      - "DRONE_GITEA_CLIENT_SECRET={{ drone_gitea_client_secret }}"
+      - "DRONE_SERVER_HOST=drone.zetdemo.ktz.me"
+      - DRONE_SERVER_PROTO=https
+      - DRONE_RPC_SECRET=super-duper-secret
+      - "DRONE_USER_CREATE=username:{{ main_username }},admin:true"
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.drone.rule=Host(`drone.zetdemo.ktz.me`)"
+      - traefik.http.routers.drone.tls.certresolver=cloudflare
+    ports:
+      - "3001:80"
+    restart: unless-stopped
+  - service_name: ktz-drone-runner-docker
+    active: true
+    image: drone/drone-runner-docker:1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_RPC_PROTO=https
+      - "DRONE_RPC_HOST=drone.zetdemo.ktz.me"
+      - DRONE_RPC_SECRET=super-duper-secret
+      - DRONE_RUNNER_CAPACITY=2
+      - "DRONE_RUNNER_NAME=zetdemo"
+    ports: 
+      - 3002:3000
+    depends_on:
+      - ktz-drone
+    restart: unless-stopped
+  ###  
+  - service_name: ktz-nginx-zetdemo-wiki
+    active: true
+    image: nginx
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.zetdemowiki.rule=Host(`wiki.zetdemo.ktz.me`)
+      - traefik.http.routers.zetdemowiki.tls.certresolver=cloudflare
+    volumes:
+      - "{{ appdata_path_zfs }}/nginx_zetdemowiki/site:/usr/share/nginx/html:ro" 
+    restart: unless-stopped
 
   # - service_name:
   #   active: true

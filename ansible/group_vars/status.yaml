@@ -102,7 +102,7 @@ containers:
     environment:
       - "SITE_ROOT=https://hc.{{ domain_cloud }}"
       - "SITE_NAME=KTZ Healthchecks"
-      - ALLOWED_HOSTS=*
+      - "ALLOWED_HOSTS=[\"https://hc.{{ domain_cloud }}\"]"
       - "SUPERUSER_EMAIL={{ gmail_address }}"
       - "SUPERUSER_PASSWORD={{ cloud_healthchecks_app_password}}"
       - REGENERATE_SETTINGS=True

@@ -30,8 +30,8 @@
     - role: geerlingguy.github-users
     - role: geerlingguy.security
     - role: geerlingguy.ntp
-    - role: ktz-figurine
     - role: ktz-boot-notification
+    - role: ironicbadger.figurine
     - role: ironicbadger.ansible_role_bash_aliases
     - role: ironicbadger.ansible_role_docker_compose_generator
       tags: compose

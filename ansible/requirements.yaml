@@ -5,3 +5,4 @@
 - src: grog.package
 - src: ironicbadger.ansible_role_docker_compose_generator
 - src: ironicbadger.ansible_role_bash_aliases
+- src: ironicbadger.figurine

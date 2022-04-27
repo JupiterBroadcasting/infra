@@ -4,5 +4,5 @@
 - src: geerlingguy.github-users
 - src: grog.package
 - src: ironicbadger.docker_compose_generator
-- src: ironicbadger.ansible_role_bash_aliases
+- src: ironicbadger.bash_aliases
 - src: ironicbadger.figurine

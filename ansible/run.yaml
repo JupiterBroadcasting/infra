@@ -8,10 +8,10 @@
     - role: geerlingguy.github-users
     - role: geerlingguy.security
     - role: geerlingguy.ntp
-    - role: ktz-figurine
+    - role: ironicbadger.figurine
     - role: ktz-boot-notification
-    - role: ironicbadger.ansible_role_bash_aliases
-    - role: ironicbadger.ansible_role_docker_compose_generator
+    - role: ironicbadger.bash_aliases
+    - role: ironicbadger.docker_compose_generator
       tags: compose
     - role: sanoid
   tasks:
@@ -32,7 +32,7 @@
     - role: geerlingguy.ntp
     - role: ktz-boot-notification
     - role: ironicbadger.figurine
-    - role: ironicbadger.ansible_role_bash_aliases
-    - role: ironicbadger.ansible_role_docker_compose_generator
+    - role: ironicbadger.bash_aliases
+    - role: ironicbadger.docker_compose_generator
       tags: compose
     - role: sanoid

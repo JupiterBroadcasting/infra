@@ -23,8 +23,7 @@ security_sudoers_passwordless:
 ntp_timezone: "America/New_York"
 
 # geerlingguy.docker
-# defaults are sane, no need to configure anything
-# https://github.com/geerlingguy/ansible-role-docker/blob/master/defaults/main.yml
+docker_compose_version: 1.29.2
 
 # geerlingguy.github_users
 github_users_authorized_keys_exclusive: true
@@ -431,6 +430,70 @@ containers:
     volumes:
       - "{{ appdata_path_zfs }}/nginx_zetdemowiki/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
+  ###
+  - service_name: ktz-smtp
+    active: true
+    image: bytemark/smtp
+    restart: unless-stopped
+  - service_name: ktz-plausible-db
+    active: true
+    image: postgres:14
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz_plausible/db:/var/lib/postgresql/data"
+    environment:
+      - "POSTGRES_PASSWORD={{ plausible_db_pass }}"
+      - "POSTGRES_USER={{ plausible_db_user }}"
+    restart: unless-stopped
+  - service_name: ktz-plausible-events
+    active: true
+    image: yandex/clickhouse-server:21.12-alpine
+    volumes:
+      - "{{ appdata_path_zfs }}/ktz_plausible/clickhouse/events:/var/lib/clickhouse"
+      - "{{ appdata_path_zfs }}/ktz_plausible/clickhouse/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro"
+      - "{{ appdata_path_zfs }}/ktz_plausible/clickhouse/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro"
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    tmpfs:
+      - /var/log/clickhouse-server
+    restart: unless-stopped
+  - service_name: ktz-plausible
+    active: true
+    image: plausible/analytics:latest
+    command: sh -c 'sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh db init-admin && /entrypoint.sh run'
+    depends_on:
+      - ktz-smtp
+      - ktz-plausible-db
+      - ktz-plausible-events
+    environment:
+      - "ADMIN_USER_EMAIL={{ plausible_admin_user_email }}"
+      - "ADMIN_USER_NAME={{ plausible_admin_user_name }}"
+      - "ADMIN_USER_PWD={{ plausible_admin_user_pass }}"
+      - "BASE_URL={{ plausible_base_url }}"
+      - "SECRET_KEY_BASE={{ plausible_secret_key_base }}"
+      - "DATABASE_URL=postgres://{{ plausible_db_user }}:{{ plausible_db_pass }}@ktz-plausible-db:5432/plausible"
+      - CLICKHOUSE_DATABASE_URL=http://ktz-plausible-events:8123/plausible
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.plausible.rule=Host(`plausible.{{ domain_cloud }}`)"
+      - traefik.http.routers.plausible.entrypoints=websecure
+      - traefik.http.routers.plausible.tls.certresolver=cloudflare
+      - traefik.http.services.plausible.loadbalancer.server.port=8000 
+    restart: unless-stopped
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   # - service_name:
   #   active: true

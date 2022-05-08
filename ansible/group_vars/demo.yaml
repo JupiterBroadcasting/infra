@@ -434,6 +434,11 @@ containers:
   - service_name: ktz-smtp
     active: true
     image: bytemark/smtp
+    environment:
+      - "RELAY_HOST={{ plausible_email_host }}"
+      - RELAY_PORT=465
+      - "RELAY_USERNAME={{ plausible_email_username }}"
+      - "RELAY_PASSWORD={{ plausible_email_password }}"
     restart: unless-stopped
   - service_name: ktz-plausible-db
     active: true
@@ -461,7 +466,7 @@ containers:
   - service_name: ktz-plausible
     active: true
     image: plausible/analytics:latest
-    command: sh -c 'sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh db init-admin && /entrypoint.sh run'
+    command: sh -c '/entrypoint.sh db migrate && /entrypoint.sh run'
     depends_on:
       - ktz-smtp
       - ktz-plausible-db
@@ -474,6 +479,13 @@ containers:
       - "SECRET_KEY_BASE={{ plausible_secret_key_base }}"
       - "DATABASE_URL=postgres://{{ plausible_db_user }}:{{ plausible_db_pass }}@ktz-plausible-db:5432/plausible"
       - CLICKHOUSE_DATABASE_URL=http://ktz-plausible-events:8123/plausible
+      - CRON_ENABLED=true
+      - DISABLE_REGISTRATION=false
+      #- SMTP_HOST_SSL_ENABLED=false
+      - "SMTP_HOST_ADDR={{ plausible_email_host }}"
+      - SMTP_HOST_PORT=465
+      - "SMTP_USER_NAME={{ plausible_email_username }}"
+      - "SMTP_USER_PWD={{ plausible_email_password }}"
     labels:
       - traefik.enable=true
       - "traefik.http.routers.plausible.rule=Host(`plausible.{{ domain_cloud }}`)"

@@ -36,3 +36,5 @@
     - role: ironicbadger.docker_compose_generator
       tags: compose
     - role: sanoid
+    - role: dns
+      tags: dns

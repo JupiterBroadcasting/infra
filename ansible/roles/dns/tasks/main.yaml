@@ -1,0 +1,105 @@
+---
+
+# https://ajhaupt.blogspot.com/2019/11/ansible-dictionaries-vs-lists.html
+# - name: extract traefik hostname 
+#   ansible.builtin.debug:
+#     msg: "{{ item | regex_findall('Host\\(`([\\w\\.]+)`\\)', '\\1') | join(' ') | split('.')[-2:] }}"
+#     #msg: "{{ item | json_query(_query) }}"
+#   loop: "{{ containers }}"
+#     #- "{{ containers | }}"
+#   when: item.active != true
+
+# - ansible.builtin.debug:
+#     msg: "{{ item | regex_findall('Host\\(`([\\w\\.]+)`\\)', '\\1') }}"
+#   loop: "{{ containers }}"
+
+# - ansible.builtin.debug:
+#     msg: "{{ item | regex_findall('Host\\(`([\\w\\.]+)`\\)', '\\1') }}"
+#   vars:
+#     _query: "labels[?contains(@, 'Host') == `true`]"
+#   loop: "{{ containers }}"
+#   when: item.active
+
+# - ansible.builtin.debug:
+#     msg: "{{ (item | regex_findall('Host\\(`([\\w\\.]+)`\\)', '\\1') }}"
+#   vars:
+#     _query: "labels[?contains(@, 'Host') == `true`]"
+#   loop: "{{ containers }}"
+#   when: item.active
+
+# - ansible.builtin.debug:
+#     msg: "{{ (item |
+#       regex_findall('Host\\(`([\\w\\.]+)`\\)', '\\1') | 
+#       first | 
+#       split('.') | 
+#       list)[:-2] | 
+#       join('.') }}"
+#   vars:
+#     _query: "labels[?contains(@, 'Host') == `true`]"
+#   loop: "{{ containers }}"
+#   when: not item.active
+
+- name: Create DNS records for active containers
+  community.general.cloudflare_dns:
+    zone: "{{ (item | 
+      json_query(_query) | 
+      regex_search('Host\\(`([\\w\\.]+)`\\)', '\\1') | 
+      first | 
+      split('.') | 
+      list)[-2:] | 
+      join('.') }}"
+    record: "{{ (item | 
+      json_query(_query) | 
+      regex_search('Host\\(`([\\w\\.]+)`\\)', '\\1') | 
+      first | 
+      split('.') | 
+      list)[:-2] | 
+      join('.') }}"
+    type: A
+    value: "{{ dns_ip | default(default_dns_ip) }}"
+    account_email: "{{ cloudflare_account_email }}"
+    account_api_key: "{{ cloudflare_api_key }}"
+  vars:
+    _query: "labels[?contains(@, 'Host') == `true`]"
+  loop: "{{ containers }}"
+  when: item.active
+
+- name: Remove DNS records for inactive containers
+  community.general.cloudflare_dns:
+    zone: "{{ (item | 
+      json_query(_query) | 
+      regex_search('Host\\(`([\\w\\.]+)`\\)', '\\1') | 
+      first | 
+      split('.') | 
+      list)[-2:] | 
+      join('.') }}"
+    record: "{{ (item | 
+      json_query(_query) | 
+      regex_search('Host\\(`([\\w\\.]+)`\\)', '\\1') | 
+      first | 
+      split('.') | 
+      list)[:-2] | 
+      join('.') }}"
+    type: A
+    state: absent
+    value: "{{ dns_ip | default(default_dns_ip) }}"
+    account_email: "{{ cloudflare_account_email }}"
+    account_api_key: "{{ cloudflare_api_key }}"
+  vars:
+    _query: "labels[?contains(@, 'Host') == `true`]"
+  loop: "{{ containers }}"
+  when: not item.active
+
+# - ansible.builtin.debug:
+#     msg: "{{ item | json_query(_query) }}"
+#   vars:
+#     #_query: '[].{active: active, host_lb: (labels[?contains(@, ''Host'') == `true`])[0] }'
+#     _query: 'active[]'
+#   loop: "{{ containers }}"
+#   when: not item.active
+
+# - name: Display all ports from cluster1
+#   ansible.builtin.debug:
+#     msg: "{{ domain_definition | to_json | from_json | community.general.json_query(server_name_query) }}"
+#   vars:
+#     server_name_query: "domain.server[?contains(name,'server1')].port"

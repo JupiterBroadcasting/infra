@@ -431,6 +431,21 @@ containers:
       - "{{ appdata_path_zfs }}/nginx_zetdemowiki/site:/usr/share/nginx/html:ro" 
     restart: unless-stopped
   ###
+  - service_name: librespeed
+    active: true
+    image: linuxserver/librespeed
+    ports:
+      - 8008:80
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.librespeed.rule=Host(`speed.ktz.cloud`)
+    environment:
+      - MODE=standalone
+      - TELEMETRY=true
+      - "PASSWORD={{ librespeed_password }}"
+    include_global_env_vars: true
+    restart: unless-stopped
+  ###
   - service_name: ktz-smtp
     active: true
     image: bytemark/smtp

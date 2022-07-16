@@ -81,7 +81,7 @@ containers:
   ###
   - service_name: jb-uptimekuma
     active: true
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:1.15.0
     labels:
       - traefik.enable=true
       - traefik.http.routers.uptimekuma.rule=Host(`status.jupiterbroadcasting.com`)

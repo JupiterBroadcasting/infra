@@ -62,6 +62,8 @@ global_env_vars:
 
 appdata_path: "/home/{{ main_username }}/appdata"
 appdata_path_zfs: /tank/appdata
+
+default_dns_ip: "{{ jb_core_ip }}"
 containers:
   - service_name: traefik
     active: true
@@ -508,7 +510,6 @@ containers:
       - traefik.http.routers.plausible.tls.certresolver=cloudflare
       - traefik.http.services.plausible.loadbalancer.server.port=8000 
     restart: unless-stopped
-
 
 
 

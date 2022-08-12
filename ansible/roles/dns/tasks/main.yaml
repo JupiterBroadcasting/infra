@@ -1,0 +1,15 @@
+---
+
+- name: Manage DNS records for containers in cloudflare
+  community.general.cloudflare_dns:
+    zone: "{{ (item.host_label | regex_search('Host\\(`([\\w\\.]+)`\\)', '\\1') | first | split('.'))[-2:] | join ('.') }}"
+    record: "{{ (item.host_label | regex_search('Host\\(`([\\w\\.]+)`\\)', '\\1') | first | split('.'))[:-2] | join ('.') }}"
+    type: A
+    state: "{{ item.active | ternary('present', 'absent') }}"
+    value: "{{ dns_ip | default(default_dns_ip) }}"
+    account_email: "{{ cloudflare_account_email }}"
+    account_api_key: "{{ cloudflare_api_key }}"
+  vars:
+    _query: "[].{\"active\": active, \"host_label\": (labels[?contains(@, 'Host') == `true`]) }"
+  loop: "{{ containers | json_query(_query) }}"
+  when: item.host_label != None and (item.host_label | length > 0)

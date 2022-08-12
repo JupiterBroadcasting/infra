@@ -47,6 +47,7 @@ global_env_vars:
   - "TZ={{ ntp_timezone }}"
 appdata_path_zfs: /tank/appdata
 
+default_dns_ip: "{{ jb_status_ip }}"
 containers:
   - service_name: traefik
     active: true
@@ -56,6 +57,8 @@ containers:
       - 80:80
       - 443:443
       - 8080:8080
+    labels:
+      #- traefik.http.routers.uptimekuma.rule=Host(`blah.ktz.cloud`)
     command:
       - --log.level=info
       - --accesslog=false
@@ -116,4 +119,24 @@ containers:
     volumes:
       - "{{ appdata_path_zfs }}/ktz-healthchecks:/config"
     include_global_env_vars: true
-    restart: unless-stopped  
+    restart: unless-stopped
+  ###
+  - service_name: nginx
+    active: false
+    image: nginx
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.nginx.rule=Host(`test.ktz.cloud`)"
+      - traefik.http.routers.nginx.entrypoints=websecure
+      - traefik.http.routers.nginx.tls.certresolver=cloudflare
+    restart: unless-stopped
+  ###
+  - service_name: nginx2
+    active: false
+    image: nginx
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.nginx2.rule=Host(`test2.ktz.cloud`)"
+      - traefik.http.routers.nginx2.entrypoints=websecure
+      - traefik.http.routers.nginx2.tls.certresolver=cloudflare
+    restart: unless-stopped

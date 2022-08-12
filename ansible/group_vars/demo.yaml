@@ -440,7 +440,7 @@ containers:
       - 8008:80
     labels:
       - traefik.enable=true
-      - traefik.http.routers.librespeed.rule=Host(`speed.ktz.cloud`)
+      - traefik.http.routers.librespeed.rule=Host(`speedtest.selfhosted.show`)
     environment:
       - MODE=standalone
       - TELEMETRY=true

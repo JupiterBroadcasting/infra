@@ -510,8 +510,19 @@ containers:
       - traefik.http.routers.plausible.tls.certresolver=cloudflare
       - traefik.http.services.plausible.loadbalancer.server.port=8000 
     restart: unless-stopped
-
-
+###
+  - service_name: jb-jbcom
+    active: true
+    image: jb-jbcom:latest
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jbcom.rule=Host(`dev.jupiterbroadcasting.com`)
+      - traefik.http.routers.jbcom.entrypoints=websecure
+      - traefik.http.routers.jbcom.tls.certresolver=cloudflare
+      - traefik.http.services.jbcom.loadbalancer.server.port=80 
+    #volumes:
+    #  - "{{ appdata_path_zfs }}/jb-jupiterbroadcastingcom:/usr/share/nginx/html:ro" 
+    restart: unless-stopped
 
 
 

@@ -28,8 +28,11 @@ status:
 statuscomp:
 	cd ansible; ansible-playbook run.yaml --limit status --tags compose
 
-dns2:
-	cd ansible; ansible-playbook run.yaml --limit status --tags dns
+dev:
+	cd ansible; ansible-playbook -b run.yaml --limit dev --ask-become-pass
+
+devcomp:
+	cd ansible; ansible-playbook run.yaml --limit dev --tags compose
 
 # ansible housekeeping
 

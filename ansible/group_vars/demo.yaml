@@ -26,7 +26,7 @@ ntp_timezone: "America/New_York"
 docker_compose_version: 1.29.2
 
 # geerlingguy.github_users
-github_users_authorized_keys_exclusive: true
+github_users_authorized_keys_exclusive: false
 github_users:
   # You can specify an object with 'name' (required) and 'groups' (optional):
   - name: "{{ main_username }}"

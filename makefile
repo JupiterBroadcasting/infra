@@ -3,24 +3,12 @@ tfinit:
 	cd terraform/dev; terraform init
 	cd terraform/dns-ssh; terraform init
 
-dns:
-	cd terraform/dns-ssh; terraform apply
+# core
+core:
+	cd ansible; ansible-playbook -b run.yaml --limit core --ask-become-pass
 
-# demo
-democreate:
-	cd terraform/demo; terraform apply
-
-demonuke:
-	cd terraform/demo; terraform destroy
-
-demo:
-	cd ansible; ansible-playbook -b run.yaml --limit demo --ask-become-pass
-
-demorepl:
-	cd ansible; ansible-playbook -b run.yaml --limit demo --tags replication
-
-democomp:
-	cd ansible; ansible-playbook run.yaml --limit demo --tags compose
+corecomp:
+	cd ansible; ansible-playbook run.yaml --limit core --tags compose
 
 status:
 	cd ansible; ansible-playbook -b run.yaml --limit status --ask-become-pass

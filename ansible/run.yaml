@@ -1,5 +1,5 @@
 ---
-- hosts: demo
+- hosts: core
   vars_files:
     - 'vars/vault.yaml'
   roles:

@@ -272,7 +272,7 @@ containers:
 ###
   - service_name: ktz-blog
     active: true
-    image: ghost:4.6
+    image: ghost:4-alpine
     labels:
       - traefik.enable=true
       - "traefik.http.routers.ktzblog.rule=Host(`{{ cloud_url_ktz_blog }}`)"

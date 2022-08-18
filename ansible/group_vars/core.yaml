@@ -292,7 +292,7 @@ containers:
 ###
   - service_name: ktz-blog-mum
     active: true
-    image: ghost:4.6
+    image: ghost:4-alpine
     labels:
       - traefik.enable=true
       - "traefik.http.routers.mumblog.rule=Host(`{{ cloud_url_mum_blog }}`)"
@@ -483,7 +483,8 @@ containers:
   - service_name: ktz-plausible
     active: true
     image: plausible/analytics:latest
-    command: sh -c '/entrypoint.sh db migrate && /entrypoint.sh run'
+    command: 
+      - sh -c '/entrypoint.sh db migrate && /entrypoint.sh run'
     depends_on:
       - ktz-smtp
       - ktz-plausible-db

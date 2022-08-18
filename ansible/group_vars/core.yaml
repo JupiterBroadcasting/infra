@@ -517,7 +517,7 @@ containers:
     image: jb-jbcom:latest
     labels:
       - traefik.enable=true
-      - traefik.http.routers.jbcom.rule=Host(`dev.jupiterbroadcasting.com`)
+      - traefik.http.routers.jbcom.rule=Host(`new.jupiterbroadcasting.com`)
       - traefik.http.routers.jbcom.entrypoints=websecure
       - traefik.http.routers.jbcom.tls.certresolver=cloudflare
       - traefik.http.services.jbcom.loadbalancer.server.port=80 

@@ -34,8 +34,8 @@
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.docker_compose_generator
       tags: compose
-    - role: dns
-      tags: compose
+    # - role: dns
+    #   tags: compose
     - role: sanoid
   tasks:
     - hostname:

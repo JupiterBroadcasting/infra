@@ -223,8 +223,7 @@ containers:
   - service_name: ktz-plausible
     active: true
     image: plausible/analytics:latest
-    command: 
-      - sh -c '/entrypoint.sh db migrate && /entrypoint.sh run'
+    command: sh -c '/entrypoint.sh db migrate && /entrypoint.sh run'
     depends_on:
       - ktz-smtp
       - ktz-plausible-db
@@ -257,7 +256,7 @@ containers:
     image: jb-jbcom:latest
     labels:
       - traefik.enable=true
-      - traefik.http.routers.jbcom.rule=Host(`jupiterbroadcasting.com`)
+      - traefik.http.routers.jbcom.rule=Host(`www.jupiterbroadcasting.com`)
       - traefik.http.routers.jbcom.entrypoints=websecure
       - traefik.http.routers.jbcom.tls.certresolver=cloudflare
       - traefik.http.services.jbcom.loadbalancer.server.port=80 

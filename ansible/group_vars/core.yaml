@@ -256,13 +256,9 @@ containers:
     image: jb-jbcom:latest
     labels:
       - traefik.enable=true
-      - traefik.http.routers.jbcom.rule=Host(`www.jupiterbroadcasting.com`,`jupiterbroadcasting.com`)
+      - traefik.http.routers.jbcom.rule=Host(`www.jupiterbroadcasting.com`)
       - traefik.http.routers.jbcom.entrypoints=websecure
       - traefik.http.routers.jbcom.tls.certresolver=cloudflare
-      - traefik.http.routers.jbcom.middlewares=redirect-non-www
-      - traefik.http.middlewares.redirect-non-www.redirectRegex.regex=^https?://(?:www\.)?(.+)
-      - traefik.http.middlewares.redirect-non-www.redirectRegex.replacement=https://www.$${1}
-      - traefik.http.middlewares.redirect-non-www.redirectRegex.permanent=true
       - traefik.http.services.jbcom.loadbalancer.server.port=80
     restart: unless-stopped
 

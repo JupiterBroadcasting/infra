@@ -1,7 +1,7 @@
 # docs: https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record
 
 # subdomains to create for jb_com domain in cloudflare
-jb_com_subdomains = {}
+jb_com_subdomains = {
 # A Records
     "jbcom" = {
         name = "jupiterbroadcasting.com"
@@ -71,7 +71,7 @@ jb_com_subdomains = {}
         name = "notes"
         value = "45.79.147.12"
         type = "A"
-        proxied = false
+        proxied = true
         ttl = 1
     }
 

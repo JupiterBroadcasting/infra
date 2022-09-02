@@ -18,7 +18,7 @@ resource "cloudflare_record" "ssh_show" {
   proxied = each.value["proxied"]
 }
 
-resource "cloudflare_page_rule" "newjbcom" {
+resource "cloudflare_page_rule" "jbcom_pagerules" {
   for_each = var.jb_com_pagerules
 
   zone_id = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["domain-jb-com"]

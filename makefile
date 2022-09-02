@@ -1,7 +1,9 @@
+# terraform
 tfinit:
-	cd terraform/demo; terraform init
-	cd terraform/dev; terraform init
-	cd terraform/dns-ssh; terraform init
+	cd terraform/dns; terraform init
+
+dns:
+	cd terraform/dns; terraform apply
 
 # core
 core:

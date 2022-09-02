@@ -47,7 +47,7 @@ jb_com_subdomains = {
         value = "45.79.147.12"
         type = "A"
         proxied = true
-        ttl     = 1
+        ttl = 1
     }
 
     "archive" = {
@@ -55,7 +55,7 @@ jb_com_subdomains = {
         value = "23.92.19.250"
         type = "A"
         proxied = true
-        ttl     = 1
+        ttl = 1
     }
 
     "colony" = {
@@ -63,7 +63,7 @@ jb_com_subdomains = {
         value = "45.79.76.52"
         type = "A"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
     "core" = {
@@ -71,7 +71,7 @@ jb_com_subdomains = {
         value = "45.79.147.12"
         type = "A"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
     "dev" = {
@@ -79,7 +79,7 @@ jb_com_subdomains = {
         value = "45.79.206.17"
         type = "A"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
     "donate" = {
@@ -87,7 +87,7 @@ jb_com_subdomains = {
         value = "24.16.90.47"
         type = "A"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
     "legacy" = {
@@ -95,7 +95,7 @@ jb_com_subdomains = {
         value = "216.66.43.105"
         type = "A"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
     "netdata" = {
@@ -103,7 +103,7 @@ jb_com_subdomains = {
         value = "23.92.19.250"
         type = "A"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
     "notes" = {
@@ -111,7 +111,7 @@ jb_com_subdomains = {
         value = "45.79.147.12"
         type = "A"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
     "status" = {
@@ -119,7 +119,7 @@ jb_com_subdomains = {
         value = "50.116.37.88"
         type = "A"
         proxied = true
-        ttl     = 1
+        ttl = 1
     }
 
     "test.dev" = {
@@ -127,7 +127,7 @@ jb_com_subdomains = {
         value = "45.79.206.17"
         type = "A"
         proxied = true
-        ttl     = 1
+        ttl = 1
     }
 
     "www" = {
@@ -135,7 +135,7 @@ jb_com_subdomains = {
         value = "45.79.147.12"
         type = "A"
         proxied = true
-        ttl     = 1
+        ttl = 1
     }
 
 # AAAA Records
@@ -145,7 +145,7 @@ jb_com_subdomains = {
         value = "2600:3c03::f03c:93ff:fe35:667b"
         type = "AAAA"
         proxied = true
-        ttl     = 1
+        ttl = 1
     }
 
     "dev" = {
@@ -153,7 +153,7 @@ jb_com_subdomains = {
         value = "2600:3c03::f03c:93ff:fe35:667b"
         type = "AAAA"
         proxied = true
-        ttl     = 1
+        ttl = 1
     }
 
     "netdata" = {
@@ -161,7 +161,7 @@ jb_com_subdomains = {
         value = "2600:3c03::f03c:93ff:fe35:667b"
         type = "AAAA"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
 # CNAME Records
@@ -171,7 +171,7 @@ jb_com_subdomains = {
         value = "jupiterbroadcasting.com"
         type = "CNAME"
         proxied = true
-        ttl     = 1
+        ttl = 1
     }
 
 # MX Records
@@ -181,7 +181,7 @@ jb_com_subdomains = {
         type = "MX"
         priority = "10"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
 
@@ -191,7 +191,7 @@ jb_com_subdomains = {
         type = "MX"
         priority = "30"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
     "jupiterbroadcasting.com" = {
@@ -200,7 +200,7 @@ jb_com_subdomains = {
         type = "MX"
         priority = "20"
         proxied = false
-        ttl     = 1
+        ttl = 1
     }
 
 # TXT Records

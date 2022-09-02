@@ -1,48 +1,9 @@
 # docs: https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record
 
-# subdomains to create for ssh_show domain in cloudflare
-ssh_show_subdomains = {
-    "terraformtest1" = {
-        name = "testssh1"
-        proxied = true
-        value = "45.79.147.12"
-        type = "A"
-    }
-    "terraformtest2" = {
-        name = "testssh2"
-        proxied = false
-        value = "1.1.1.1"
-        type = "A"
-    }
-}
-
 # subdomains to create for jb_com domain in cloudflare
-
-
-jb_com_subdomains = {
-
-# SOA Record
-    "jupiterbroadcasting.com" = {
-        name = "jupiterbroadcasting.com"
-        value = "jupiterbroadcasting.com root.jupiterbroadcasting.com 2041376131 7200 3600 86400 3600"
-        type = "SOA"
-    }
-
+jb_com_subdomains = {}
 # A Records
-    "terraformtest1" = {
-        name = "testjbcom1"
-        proxied = true
-        value = "45.79.147.12"
-        type = "A"
-    }
-    "terraformtest2" = {
-        name = "coderradio1"
-        proxied = false
-        value = "1.1.1.1"
-        type = "A"
-    }
-
-    "jupiterbroadcasting.com" = {
+    "jbcom" = {
         name = "jupiterbroadcasting.com"
         value = "45.79.147.12"
         type = "A"
@@ -139,7 +100,6 @@ jb_com_subdomains = {
     }
 
 # AAAA Records
-
     "archive" = {
         name = "archive"
         value = "2600:3c03::f03c:93ff:fe35:667b"
@@ -165,7 +125,6 @@ jb_com_subdomains = {
     }
 
 # CNAME Records
-
     "new" = {
         name = "new"
         value = "jupiterbroadcasting.com"
@@ -174,36 +133,21 @@ jb_com_subdomains = {
         ttl = 1
     }
 
-# MX Records
-    "jupiterbroadcasting.com" = {
-        name = "jupiterbroadcasting.com"
-        value = "aspmx.l.google.com"
-        type = "MX"
-        priority = "10"
-        proxied = false
-        ttl = 1
-    }
-
-
-    "jupiterbroadcasting.com" = {
-        name = "jupiterbroadcasting.com"
-        value = "aspmx3.googlemail.com"
-        type = "MX"
-        priority = "30"
-        proxied = false
-        ttl = 1
-    }
-
-    "jupiterbroadcasting.com" = {
-        name = "jupiterbroadcasting.com"
-        value = "alt1.aspmx.l.google.com"
-        type = "MX"
-        priority = "20"
-        proxied = false
-        ttl = 1
-    }
-
 # TXT Records
-## omitted ACME challenge
+}
 
+# subdomains to create for ssh_show domain in cloudflare
+ssh_show_subdomains = {}
+
+jb_com_pagerules = {
+  "new-jb-com" = {
+    target        = "new.jupiterbroadcasting.com"
+    forwarded_url = "https://www.jupiterbroadcasting.com"
+    status_code   = "301"
+  }
+  "www-jb-com" = {
+    target        = "jupiterbroadcasting.com"
+    forwarded_url = "https://www.jupiterbroadcasting.com"
+    status_code   = "301"
+  }
 }

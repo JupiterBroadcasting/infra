@@ -12,6 +12,7 @@ variable "jb_com_subdomains" {
         proxied = bool
         value   = string
         type    = string
+        ttl = string # value of 1 = auto
     }))
 }
 
@@ -21,5 +22,14 @@ variable "ssh_show_subdomains" {
         proxied = bool
         value   = string
         type    = string
+        ttl = string # value of 1 = auto
+    }))
+}
+
+variable "jb_com_pagerules" {
+    type = map(object({
+        target        = string
+        forwarded_url = string
+        status_code   = string
     }))
 }

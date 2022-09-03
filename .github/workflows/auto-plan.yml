@@ -117,11 +117,14 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
+      - name: Terraform Plan Status
+        run: echo "${PWD}" ; find . -name "*terraform.plan*" -exec ls -l {} \; 2>/dev/null
+
       - name: uploading terraform plan
         uses: actions/upload-artifact@v3
         with:
           name: terraform-plan
-          path: terraform.plan
+          path: ${{ github.workspace }}/terraform/dns/terraform.plan
 
   terraform_apply:
     needs: terraform_plan

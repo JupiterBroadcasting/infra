@@ -4,7 +4,7 @@
 jb_com_subdomains = {
 # A Records
     "jbcom" = {
-        name = "jupiterbroadcasting.com"
+        name = "@"
         value = "45.79.147.12"
         type = "A"
         proxied = true
@@ -144,10 +144,12 @@ jb_com_pagerules = {
     target        = "new.jupiterbroadcasting.com"
     forwarded_url = "https://www.jupiterbroadcasting.com"
     status_code   = "301"
+    priority = 2
   }
   "www-jb-com" = {
     target        = "jupiterbroadcasting.com"
     forwarded_url = "https://www.jupiterbroadcasting.com"
     status_code   = "301"
+    priority = 1
   }
 }

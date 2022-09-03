@@ -6,7 +6,6 @@ name: Terraform Plan
 
 on:
 
-  push:
   pull_request:
   workflow_run:
     workflows: ["Linting"]
@@ -51,7 +50,6 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'pull_request'
         run: terraform plan -no-color
         continue-on-error: true
 

@@ -6,7 +6,7 @@ name: Terraform Plan
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
   workflow_dispatch:
 
@@ -117,32 +117,6 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-      - name: Terraform Plan Status
-        run: echo "${PWD}" ; find . -name "*terraform.plan*" -exec ls -l {} \; 2>/dev/null
-
-      - name: uploading terraform plan
-        uses: actions/upload-artifact@v3
-        with:
-          name: terraform-plan
-          path: ${{ github.workspace }}/terraform/dns/terraform.plan
-
-  terraform_apply:
-    needs: terraform_plan
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production
-    steps:
-      - uses: actions/checkout@v2
-      - uses: hashicorp/setup-terraform@v2
-
-      - name: downloading algolia data
-        uses: actions/download-artifact@v3
-        with:
-          name: terraform-plan
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-
       - name: Terraform Apply
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false terraform.plan

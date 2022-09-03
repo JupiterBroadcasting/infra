@@ -18,8 +18,10 @@ What is terraform?
 
 ### CI
 
-Define necessary environment variables for API calls. API tokens needed so far are:
+Define necessary [environment variables](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) for API calls. API tokens needed so far are:
 
 - AWS_ACCESS_KEY_ID = your linode s3 access key (follow the [bootstrap notes](bootstrap/README.md) to get this)
 - AWS_SECRET_ACCESS_KEY = your linode s3 secret key (follow the [bootstrap notes](bootstrap/README.md) to get this)
 - CLOUDFLARE_API_KEY = your cloudflare API key (guide [here](dns/README.md#cloudflare-api-key) on how to create)
+
+([here](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions) are some security guidelines from GitHub on hardening GitHub Actions (also environment variables).)

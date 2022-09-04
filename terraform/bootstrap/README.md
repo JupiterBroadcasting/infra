@@ -14,6 +14,8 @@ Generate a [Linode PAT (Personal Access Token)](https://www.linode.com/docs/prod
 
 ## Bootstrap
 
+**NOTE:** Only run this locally! It's only meant for provisioning the initial bootstrap for terraform's remote state.
+
 1. After doing the [local setup](#local-development), you can then run `terraform plan` (if you want to see what it'll create)
 2. `terraform apply` and type `yes` if everything looks good
 3. To grab the access & secret key you can run the following command: `terraform output -raw bucket_access_key && echo && terraform output -raw bucket_secret_key`

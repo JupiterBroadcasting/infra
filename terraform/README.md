@@ -1,6 +1,16 @@
 # Overview
 
-What is terraform?
+## In this repo
+
+There are accompanying README.md files in the different terraform directories.
+
+They in general cover:
+
+- what terraform is
+- how to setup the local development environment so it's similar to the CI
+- the current required CI environment variables needing to be setup in the GH repo's settings
+
+## What is terraform?
 
 [![what is terraform](http://img.youtube.com/vi/HmxkYNv1ksg/0.jpg)](https://youtu.be/HmxkYNv1ksg "What is terraform")
 

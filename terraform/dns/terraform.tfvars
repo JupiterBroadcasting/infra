@@ -146,8 +146,8 @@ jb_com_pagerules = {
     status_code   = "301"
   }
   "www-jb-com" = {
-    target        = "jupiterbroadcasting.com"
-    forwarded_url = "https://www.jupiterbroadcasting.com"
+    target        = "jupiterbroadcasting.com/*"
+    forwarded_url = "https://www.jupiterbroadcasting.com/$1"
     status_code   = "301"
   }
 }

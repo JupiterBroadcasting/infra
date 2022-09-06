@@ -1,8 +1,11 @@
 ## Provider configs
 provider "cloudflare" {
   # https://api.cloudflare.com/#getting-started-resource-ids
-  email   = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["account-email"]
-  api_key = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["api-key"]
+#####
+# migrate to using .envrc environment variables
+#   email   = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["account-email"]
+#   api_key = yamldecode(file("~/.config/tokens/cloudflare.yaml"))["api-key"]
+#####
 }
 
 # https://stackoverflow.com/questions/70785025/terraform-for-each-map-of-objects
@@ -31,5 +34,6 @@ variable "jb_com_pagerules" {
         target        = string
         forwarded_url = string
         status_code   = string
+        priority      = number
     }))
 }

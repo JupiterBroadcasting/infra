@@ -38,7 +38,7 @@ bash_aliases:
   - { alias: "appdata", command: "cd /mnt/tank/appdata" }
   - { alias: "zspace", command: "zfs list -o space" }
   - { alias: "zsnap", command: "zfs list -t snapshot" }
-  - { alias: "dfclean", command: "df -h -x tmpfs -t fuse.mergerfs -t xfs -t ext4 -t zfs"}
+  - { alias: "dfclean", command: "df -h -x tmpfs -t xfs -t ext4 -t zfs"}
 
 # ironicbadger.docker_compose_generator
 global_env_vars:
@@ -56,9 +56,7 @@ containers:
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
-    labels:
-      #- traefik.http.routers.uptimekuma.rule=Host(`blah.ktz.cloud`)
+      #- 8080:8080
     command:
       - --log.level=info
       - --accesslog=false
@@ -119,24 +117,4 @@ containers:
     volumes:
       - "{{ appdata_path_zfs }}/ktz-healthchecks:/config"
     include_global_env_vars: true
-    restart: unless-stopped
-  ###
-  - service_name: nginx
-    active: false
-    image: nginx
-    labels:
-      - traefik.enable=true
-      - "traefik.http.routers.nginx.rule=Host(`test.ktz.cloud`)"
-      - traefik.http.routers.nginx.entrypoints=websecure
-      - traefik.http.routers.nginx.tls.certresolver=cloudflare
-    restart: unless-stopped
-  ###
-  - service_name: nginx2
-    active: false
-    image: nginx
-    labels:
-      - traefik.enable=true
-      - "traefik.http.routers.nginx2.rule=Host(`test2.ktz.cloud`)"
-      - traefik.http.routers.nginx2.entrypoints=websecure
-      - traefik.http.routers.nginx2.tls.certresolver=cloudflare
     restart: unless-stopped

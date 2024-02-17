@@ -19,27 +19,31 @@
       genPkgs = import nixpkgs { config.allowUnfree = true; };
 
       # creates a nixos system configuration using the specified inputs
-      nixosSystem = hostName: username:
+      nixosSystem = hostname: username:
         let
           pkgs = genPkgs;
         in
           nixpkgs.lib.nixosSystem
           {
-            modules = [
               # adds unstable to be available in top-level evals (like in common-packages)
-              { _module.args = { unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux; }; }
-
+            specialArgs = {
+                  unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux;
+                  inherit username;
+            };
+            modules = [
               # ip address, host specific stuff 
-              ./nix/hosts/nixos/${hostName}
-              vscode-server.nixosModules.default
+              ./nix/hosts/nixos/${hostname}
+
               home-manager.nixosModules.home-manager
               {
-                networking.hostName = hostName;
+                networking.hostName = hostname;
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
                 home-manager.users.${username} = { imports = [ ./nix/home/${username}.nix ]; };
               }
               ./nix/hosts/common/nixos-common.nix
+
+              vscode-server.nixosModules.default
             ];
             
           };

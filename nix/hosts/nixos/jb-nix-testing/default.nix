@@ -23,13 +23,13 @@
   # value set in nixos-common.nix to Seattle
   #time.timeZone = "America/New_York";
 
-  users.users.jarjar =
-  {
-    group = "jarjar";
-    isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
-    hashedPassword = "$6$wW/xsljhhG/vssC3$ujh/4jSZp7APUsbI6FAAUtIkaWVl9ElocFV6FKO7vD4ouoXKiebecrfmtd46NNVJBOFO8blNaEvkOLmOW5X3j.";
-  };
+  # users.users.${username} =
+  # {
+  #   group = "jarjar";
+  #   isNormalUser = true;
+  #   extraGroups = [ "wheel" "docker" ];
+  #   hashedPassword = "$6$wW/xsljhhG/vssC3$ujh/4jSZp7APUsbI6FAAUtIkaWVl9ElocFV6FKO7vD4ouoXKiebecrfmtd46NNVJBOFO8blNaEvkOLmOW5X3j.";
+  # };
 
   services.openssh = 
   {

@@ -25,10 +25,9 @@
         in
           nixpkgs.lib.nixosSystem
           {
-            system = "x86_64-linux";
             modules = [
               # adds unstable to be available in top-level evals (like in common-packages)
-              { _module.args = { unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.${system}; }; }
+              { _module.args = { unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux; }; }
 
               # ip address, host specific stuff 
               ./nix/hosts/nixos/${hostName}

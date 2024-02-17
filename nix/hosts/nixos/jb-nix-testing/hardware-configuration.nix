@@ -16,13 +16,15 @@
 
   fileSystems."/" =
     {
-      device = "/dev/disk/by-label/nixos";
+      #device = "/dev/disk/by-label/nixos";
+      device = "/dev/vda2";
       fsType = "btrfs";
     };
 
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-label/boot";
+      #device = "/dev/disk/by-label/boot";
+      device = "/dev/vda1";
       fsType = "vfat";
     };
 

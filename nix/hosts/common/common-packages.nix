@@ -3,17 +3,15 @@
 with pkgs; [
   ## unstable
   #unstablePkgs.yt-dlp
+  #unstablePkgs.figurine
 
   ## stable
   ansible
   docker-compose
+  #figurine
   git
-  iperf3
-  just
   jq
   mc
-  mosh
-  neofetch
   nmap
   ripgrep
   tree
@@ -23,6 +21,5 @@ with pkgs; [
   vim
 
   # requires nixpkgs.config.allowUnfree = true;
-  #terraform
-  #vscode-extensions.ms-vscode-remote.remote-ssh
+  vscode-extensions.ms-vscode-remote.remote-ssh
 ]

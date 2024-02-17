@@ -16,7 +16,10 @@
       inputs = { inherit nixpkgs nixpkgs-unstable home-manager vscode-server; };
 
       # creates package set for us to use
-      genPkgs = import nixpkgs { config.allowUnfree = true; };
+      genPkgs = import nixpkgs {
+        config.allowUnfree = true;
+        config.allowUnfreePredicate = _: true;
+      };
 
       # creates a nixos system configuration using the specified inputs
       nixosSystem = hostname: username:

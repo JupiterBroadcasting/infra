@@ -14,9 +14,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  #boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
-
-  time.timeZone = "America/New_York";
+  # value set in nixos-common.nix to Seattle
+  #time.timeZone = "America/New_York";
 
   users.users.alex = 
   {

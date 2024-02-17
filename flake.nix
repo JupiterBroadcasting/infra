@@ -25,29 +25,24 @@
         in
           nixpkgs.lib.nixosSystem
           {
-            # adds unstable to be available in top-level evals (like in common-packages)
             specialArgs = {
+              # adds unstable to be available in top-level evals (like in common-packages)
               unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux;
+
+              # lets us use these things in modules
               customArgs = { inherit username pkgs; };
-              #inherit username pkgs;
             };
             modules = [
-              # ip address, host specific stuff 
               ./nix/hosts/nixos/${hostname}
-
-              home-manager.nixosModules.home-manager
-              {
+              vscode-server.nixosModules.default
+              home-manager.nixosModules.home-manager {
                 networking.hostName = hostname;
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                #home-manager.extraSpecialArgs = specialArgs;
                 home-manager.users.${username} = { imports = [ ./nix/home/${username}.nix ]; };
               }
               ./nix/hosts/common/nixos-common.nix
-
-              vscode-server.nixosModules.default
             ];
-            
           };
     in
     {

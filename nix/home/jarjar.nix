@@ -2,6 +2,16 @@
 {
   home.stateVersion = "23.11";
 
+  # users.users.jarjar.group = "jarjar";
+  # users.groups.jarjar = {};
+  # users.users.${username} =
+  # {
+  #   group = "${username}";
+  #   isNormalUser = true;
+  #   extraGroups = [ "wheel" "docker" ];
+  #   hashedPassword = "$6$wW/xsljhhG/vssC3$ujh/4jSZp7APUsbI6FAAUtIkaWVl9ElocFV6FKO7vD4ouoXKiebecrfmtd46NNVJBOFO8blNaEvkOLmOW5X3j.";
+  # };
+
   # list of programs
   # https://mipmip.github.io/home-manager-option-search
 

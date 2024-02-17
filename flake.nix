@@ -46,7 +46,7 @@
     in
     {
       nixosConfigurations = {
-        jb-nix-test = nixosSystem "jb-nix-test" "jarjar";
+        jb-nix-testing = nixosSystem "jb-nix-testing" "jarjar";
     };
   };
 }

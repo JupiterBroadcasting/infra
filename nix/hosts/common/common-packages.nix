@@ -7,9 +7,11 @@ with pkgs; [
 
   ## stable
   ansible
+  btop
   docker-compose
   #figurine
   git
+  htop
   jq
   mc
   nmap

@@ -16,7 +16,6 @@ with pkgs; [
   neofetch
   nmap
   ripgrep
-  terraform
   tree
   unzip
   watch
@@ -24,5 +23,6 @@ with pkgs; [
   vim
 
   # requires nixpkgs.config.allowUnfree = true;
-  vscode-extensions.ms-vscode-remote.remote-ssh
+  #terraform
+  #vscode-extensions.ms-vscode-remote.remote-ssh
 ]

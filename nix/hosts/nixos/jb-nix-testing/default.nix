@@ -2,9 +2,18 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ config, pkgs, unstablePkgs, ... }:
+{ config, pkgs, unstablePkgs, customArgs, ... }:
 
 {
+
+  users.groups.${customArgs.username} = {};
+  users.users.${customArgs.username} = {
+    group = customArgs.username;
+    isNormalUser = true;
+    extraGroups = [ "wheel" "docker" ];
+    hashedPassword = "$6$wW/xsljhhG/vssC3$ujh/4jSZp7APUsbI6FAAUtIkaWVl9ElocFV6FKO7vD4ouoXKiebecrfmtd46NNVJBOFO8blNaEvkOLmOW5X3j.";
+  };
+
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -18,18 +27,10 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-
-
   # value set in nixos-common.nix to Seattle
   #time.timeZone = "America/New_York";
 
-  # users.users.${username} =
-  # {
-  #   group = "jarjar";
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" "docker" ];
-  #   hashedPassword = "$6$wW/xsljhhG/vssC3$ujh/4jSZp7APUsbI6FAAUtIkaWVl9ElocFV6FKO7vD4ouoXKiebecrfmtd46NNVJBOFO8blNaEvkOLmOW5X3j.";
-  # };
+
 
   services.openssh = 
   {

@@ -25,10 +25,11 @@
         in
           nixpkgs.lib.nixosSystem
           {
-              # adds unstable to be available in top-level evals (like in common-packages)
+            # adds unstable to be available in top-level evals (like in common-packages)
             specialArgs = {
-                  unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux;
-                  inherit username;
+              unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux;
+              customArgs = { inherit username pkgs; };
+              #inherit username pkgs;
             };
             modules = [
               # ip address, host specific stuff 
@@ -39,6 +40,7 @@
                 networking.hostName = hostname;
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
+                #home-manager.extraSpecialArgs = specialArgs;
                 home-manager.users.${username} = { imports = [ ./nix/home/${username}.nix ]; };
               }
               ./nix/hosts/common/nixos-common.nix

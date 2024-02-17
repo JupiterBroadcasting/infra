@@ -1,6 +1,7 @@
 .vault-password
 galaxy_roles/
 .vscode
+result/
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,ansible,terraform,visualstudiocode,direnv
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,ansible,terraform,visualstudiocode,direnv

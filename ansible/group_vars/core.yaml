@@ -248,12 +248,12 @@ containers:
       - "traefik.http.routers.plausible.rule=Host(`plausible.{{ domain_cloud }}`)"
       - traefik.http.routers.plausible.entrypoints=websecure
       - traefik.http.routers.plausible.tls.certresolver=cloudflare
-      - traefik.http.services.plausible.loadbalancer.server.port=8000 
+      - traefik.http.services.plausible.loadbalancer.server.port=8000
     restart: unless-stopped
 ###
   - service_name: jb-jbcom
     active: true
-    image: jb-jbcom:latest
+    image: ghcr.io/jupiterbroadcasting/jupiterbroadcasting.com:latest
     labels:
       - traefik.enable=true
       - traefik.http.routers.jbcom.rule=Host(`www.jupiterbroadcasting.com`)

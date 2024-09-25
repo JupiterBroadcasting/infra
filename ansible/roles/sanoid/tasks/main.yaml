@@ -1,9 +1,9 @@
 ---
 
 - name: sanoid install
-  include: install.yaml
+  include_tasks: install.yaml
 
 - name: replication
-  include: replication.yaml
+  include_tasks: replication.yaml
   tags:
     - replication
